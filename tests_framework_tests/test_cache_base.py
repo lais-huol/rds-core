@@ -1,38 +1,54 @@
 # import time
 # import unittest
-# from bds_framework.cache import default_cache, caches
+import time
+
+from bds_framework.cache import default_cache, caches
+from bds_framework.cache.nocache import NoCache
+
+
 #
 #
-# # functions/classes for complex data type tests
-# def f():
-#     return 42
-#
-#
-# class C:
-#     def m(n):
-#         return 24
-#
-#
+# functions/classes for complex data type tests_framework_tests
+def f():
+    return 42
+
+
+class C:
+    def m(n):
+        return 24
+
+
 # KEY_ERRORS_WITH_MEMCACHED_MSG = (
 #     "Cache key contains characters that will cause errors if used with memcached: %r"
 # )
-#
-#
-# class BaseCacheTests:
-#     # # A common set of tests to apply to all cache backends
-#     # factory = RequestFactory()
-#
-#     # Some clients raise custom exceptions when .incr() or .decr() are called
-#     # with a non-integer value.
-#     incr_decr_type_error = TypeError
-#
-#     def setUp(self):
-#         self.cache = None
-#         super().setUp()
-#
-#     def tearDown(self):
-#         default_cache.clear()
-#
+
+
+class TestBaseCache:
+    # # A common set of tests_framework_tests to apply to all cache backends
+    # factory = RequestFactory()
+
+    # Some clients raise custom exceptions when .incr() or .decr() are called
+    # with a non-integer value.
+    incr_decr_type_error = TypeError
+
+    def __init__(self, methodName: str = 'runTest'):
+        self.cache = NoCache()
+        super(TestBaseCache, self).__init__(methodName)
+
+    def setUp(self):
+        super().setUp()
+
+    def tearDown(self):
+        self.cache.clear()
+
+    def test_add(self):
+        self.assertTrue(self.cache.add("key1", "value1"))
+
+    def test_get(self):
+        self.assertTrue(self.cache.add("key1", "value1"))
+        time.sleep(2)
+        self.assertEqual(self.cache.get("key1"), 'value1')
+
 #     def test_simple(self):
 #         # Simple cache set/get works
 #         default_cache.set("key", "value")
@@ -144,7 +160,7 @@
 #
 #     def test_data_types(self):
 #         # Many different data types can be cached
-#         tests = {
+#         tests_framework_tests = {
 #             "string": "this is a string",
 #             "int": 42,
 #             "bool": True,
@@ -154,7 +170,7 @@
 #             "function": f,
 #             "class": C,
 #         }
-#         for key, value in tests.items():
+#         for key, value in tests_framework_tests.items():
 #             with self.subTest(key=key):
 #                 default_cache.set(key, value)
 #                 self.assertEqual(default_cache.get(key), value)
@@ -436,7 +452,7 @@
 #         old_func = default_cache.key_func
 #         default_cache.key_func = key_func or func
 #
-#         tests = [
+#         tests_framework_tests = [
 #             ("add", [key, 1]),
 #             ("get", [key]),
 #             ("set", [key, 1]),
@@ -449,7 +465,7 @@
 #             ("delete_many", [[key, "b"]]),
 #         ]
 #         try:
-#             for operation, args in tests:
+#             for operation, args in tests_framework_tests:
 #                 with self.subTest(operation=operation):
 #                     with self.assertWarns(CacheKeyWarning) as cm:
 #                         getattr(cache, operation)(*args)
@@ -865,7 +881,7 @@
 #             self.assertEqual(default_cache.get_or_set("key", "default"), "default")
 #
 #
-# # # Unit tests for cache framework
+# # # Unit tests_framework_tests for cache framework
 # # # Uses whatever cache backend is set in the test settings file.
 # # import copy
 # # import io
@@ -962,7 +978,7 @@
 # #     "default": {},
 # #     "prefix": {"KEY_PREFIX": "cacheprefix{}".format(os.getpid())},
 # #     "custom_key": {"KEY_FUNCTION": custom_key_func},
-# #     "custom_key2": {"KEY_FUNCTION": "cache.tests.custom_key_func"},
+# #     "custom_key2": {"KEY_FUNCTION": "cache.tests_framework_tests.custom_key_func"},
 # #     "cull": {"OPTIONS": {"MAX_ENTRIES": 30}},
 # #     "zero_cull": {"OPTIONS": {"CULL_FREQUENCY": 0, "MAX_ENTRIES": 30}},
 # # }
@@ -973,7 +989,7 @@
 # #     # `exclude` is a set of cache names denoting which `_caches_setting_base` keys
 # #     # should be omitted.
 # #     # `params` are test specific overrides and `_caches_settings_base` is the
-# #     # base config for the tests.
+# #     # base config for the tests_framework_tests.
 # #     # This results in the following search order:
 # #     # params -> _caches_setting_base -> base
 # #     base = base or {}
@@ -1335,7 +1351,7 @@
 # #         key.
 # #         """
 # #         msg = expected_warning.replace(key, default_cache.make_key(key))
-# #         tests = [
+# #         tests_framework_tests = [
 # #             ("add", [key, 1]),
 # #             ("get", [key]),
 # #             ("set", [key, 1]),
@@ -1347,7 +1363,7 @@
 # #             ("set_many", [{key: 1, "b": 2}]),
 # #             ("delete_many", [[key, "b"]]),
 # #         ]
-# #         for operation, args in tests:
+# #         for operation, args in tests_framework_tests:
 # #             with self.subTest(operation=operation):
 # #                 with self.assertRaises(InvalidCacheKey) as cm:
 # #                     getattr(cache, operation)(*args)
@@ -1461,7 +1477,7 @@
 # #
 # #     def test_pylibmc_client_servers(self):
 # #         backend = self.base_params["BACKEND"]
-# #         tests = [
+# #         tests_framework_tests = [
 # #             ("unix:/run/memcached/socket", "/run/memcached/socket"),
 # #             ("/run/memcached/socket", "/run/memcached/socket"),
 # #             ("localhost", "localhost"),
@@ -1471,7 +1487,7 @@
 # #             ("127.0.0.1", "127.0.0.1"),
 # #             ("127.0.0.1:11211", "127.0.0.1:11211"),
 # #         ]
-# #         for location, expected in tests:
+# #         for location, expected in tests_framework_tests:
 # #             settings = {"default": {"BACKEND": backend, "LOCATION": location}}
 # #             with self.subTest(location), self.settings(CACHES=settings):
 # #                 self.assertEqual(default_cache.client_servers, [expected])
@@ -1584,12 +1600,12 @@
 # #         setting_changed.send(self.__class__, setting="CACHES", enter=False)
 # #         default_cache.set("foo", "bar")
 # #         self.assertIs(dir_path.exists(), True)
-# #         tests = [
+# #         tests_framework_tests = [
 # #             dir_path,
 # #             dir_path.parent,
 # #             dir_path.parent.parent,
 # #         ]
-# #         for directory in tests:
+# #         for directory in tests_framework_tests:
 # #             with self.subTest(directory=directory):
 # #                 dir_mode = directory.stat().st_mode & 0o777
 # #                 self.assertEqual(dir_mode, 0o700)
@@ -1943,7 +1959,7 @@
 # #         )
 # #
 # #     def test_patch_cache_control(self):
-# #         tests = (
+# #         tests_framework_tests = (
 # #             # Initial Cache-Control, kwargs to patch_cache_control, expected
 # #             # Cache-Control parts.
 # #             (None, {"private": True}, {"private"}),
@@ -1987,7 +2003,7 @@
 # #
 # #         cc_delim_re = re.compile(r"\s*,\s*")
 # #
-# #         for initial_cc, newheaders, expected_cc in tests:
+# #         for initial_cc, newheaders, expected_cc in tests_framework_tests:
 # #             with self.subTest(initial_cc=initial_cc, newheaders=newheaders):
 # #                 response = HttpResponse()
 # #                 if initial_cc is not None:
@@ -2222,7 +2238,7 @@
 # #         )
 # #         self.assertIsNone(get_cache_data)
 # #
-# #         # i18n tests
+# #         # i18n tests_framework_tests
 # #         en_message = "Hello world!"
 # #         es_message = "Hola mundo!"
 # #
@@ -2492,11 +2508,11 @@
 # #     def test_cache_page_ttl(self):
 # #         # Page ttl takes precedence over the "max-age" section of the
 # #         # "Cache-Control".
-# #         tests = [
+# #         tests_framework_tests = [
 # #             (1, 3),  # max_age < page_ttl.
 # #             (3, 1),  # max_age > page_ttl.
 # #         ]
-# #         for max_age, page_ttl in tests:
+# #         for max_age, page_ttl in tests_framework_tests:
 # #             with self.subTest(max_age=max_age, page_ttl=page_ttl):
 # #                 view = cache_page(ttl=page_ttl)(
 # #                     cache_control(max_age=max_age)(hello_world_view)

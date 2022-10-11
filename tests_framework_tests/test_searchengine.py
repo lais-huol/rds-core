@@ -15,11 +15,11 @@ from bds_framework.searchengine import (
 INVALID_ALIAS = "Não existe um search engine com o apelido 'fail' nas settings"
 
 
-class TestHelpersInit(unittest.TestCase):
+class TestSearchEngine(unittest.TestCase):
 
     def __init__(self, method_nname: str = 'runTest'):
         self.test_index = 'test_index'
-        super(TestHelpersInit, self).__init__(methodName=method_nname)
+        super(TestSearchEngine, self).__init__(methodName=method_nname)
 
     def setUp(self):
         create_index_if_not_exists(self.test_index)
