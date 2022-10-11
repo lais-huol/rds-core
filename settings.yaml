@@ -1,0 +1,38 @@
+DEBUG: true
+
+ENVIRONMENT: 'example'
+
+BASE_URL_PATH: '/bds-cnes/api/v2/'
+
+SEARCH_ENGINES:
+  default:
+    engine: 'opensearchpy.OpenSearch'
+    dsl_engine: 'opensearch_dsl.connections'
+    hosts: 'https://search:9200'
+    username: 'admin'
+    password: 'admin'
+    ssl_show_warn: false
+    verify_certs: false
+    ttl: 5
+    starting_retry_interval: 1
+    starting_max_retries: 60
+     
+
+DEFAULT_HEADERS:
+  Accept: 'application/json, text/plain, */*'
+  Accept-Encoding: 'gzip, deflate, br'
+  Accept-Language: 'pt-BR,pt;q=0.9,en-US;q=0.8,en;q=0.7'
+  Connection: 'keep-alive'
+  Host: 'cnes.datasus.gov.br'
+  Referer: 'https://cnes.datasus.gov.br/pages/estabelecimentos/consulta.jsp'
+
+CACHES:
+  default:
+    BACKEND: 'bds_framework.cache.nocache.NoCache'
+    TTL: 60
+  search_engine:
+    BACKEND: 'bds_framework.cache.search_engine.SearchEngineCache'
+    TTL: 60
+    OPTIONS:
+      search_engine_alias: 'default'
+      index_name: 'cnes_establecimento_cache'
