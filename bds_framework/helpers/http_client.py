@@ -1,17 +1,10 @@
 import json
 from http.client import HTTPException as OriginalHTTPException
 import requests
+from bds_framework.config import settings
 
 
-try:
-    try:
-        from config import settings
-        DEFAULT_HEADERS = settings.DEFAULT_HEADERS
-    except ModuleNotFoundError:
-        from bds_framework.config import settings
-        DEFAULT_HEADERS = settings.DEFAULT_HEADERS
-except ModuleNotFoundError:
-    DEFAULT_HEADERS = {}
+DEFAULT_HEADERS = settings.get('DEFAULT_HEADERS', {})
 
 
 class HTTPException(OriginalHTTPException):
