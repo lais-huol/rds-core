@@ -13,7 +13,7 @@ class BaseCache:
     def get_ttl(self, ttl: int = None) -> int:
         return ttl if (isinstance(ttl, int) and ttl >= 0) or (ttl is not None) else self.default_ttl
 
-    def has_key(self, key: str) -> bool:
+    def key_exists(self, key: str) -> bool:
         return self.get(key, MISSING_KEY) is not MISSING_KEY
 
     def add(self, key: str, value: Any, ttl: int = None) -> bool:
@@ -75,9 +75,11 @@ class BaseCache:
         raise NotImplementedError("subclasses of BaseCache must provide a touch() method")
 
     def get_many(self, keys: List[str]) -> Dict[str, Any]:
-        """ Fetch a bunch of keys from the cache. For certain backends (memcached, pgsql) this can be *much* faster when fetching multiple values.
+        """ Fetch a bunch of keys from the cache. For certain backends (memcached, pgsql) this can be *much* faster
+            when fetching multiple values.
 
-            Return a dict mapping each key in keys to its value. If the given key is missing, it will be missing from the response dict.
+            Return a dict mapping each key in keys to its value. If the given key is missing, it will be missing from
+            the response dict.
         """
         d = {}
         for k in keys:

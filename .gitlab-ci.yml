@@ -28,6 +28,13 @@ static-type-check:
     - mypy --warn-unused-configs --python-version 3.10 --show-error-context --show-column-numbers --show-error-end --show-error-codes  --pretty --html-report statictypecheck --cobertura-xml-report statictypecheck  bds_framework
     # --disallow-untyped-calls --disallow-untyped-defs
 
+lint:
+  stage: test
+  image: python:3.10
+  script:
+    - pip install flake8
+    - flake8
+
 
 sast:
   stage: tests_bds_framework

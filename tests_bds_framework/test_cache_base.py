@@ -1,7 +1,6 @@
 import unittest
 import pytest
 from bds_framework.cache.base import BaseCache
-from tests_bds_framework.test_cache_mixin import TestCacheMixin
 
 
 class TestBaseCase(unittest.TestCase):

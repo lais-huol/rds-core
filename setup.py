@@ -1,5 +1,5 @@
 import os
-from setuptools import setup, find_packages
+from setuptools import setup
 
 
 def fast_scandir(dirname):
@@ -79,4 +79,3 @@ setup(
     package_dir={'bds_framework': 'bds_framework'},
     package_data=package_data_dirs('bds_framework', [])
 )
-

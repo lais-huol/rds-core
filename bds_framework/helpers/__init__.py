@@ -1,6 +1,7 @@
 from typing import Any, List, Dict
 import importlib
 
+
 def get_class(full_class_name: str) -> Any:
     module_name, class_name = full_class_name.rsplit(".", 1)
     return getattr(importlib.import_module(module_name), class_name)

@@ -1,4 +1,4 @@
-from typing import Any, List, Dict, Union
+from typing import Any, List, Dict
 
 import opensearchpy
 import elasticsearch
@@ -18,7 +18,7 @@ class SearchEngineCache(BaseCache):
     def search_engine(self) -> Any:
         return search_engine_func(self.search_engine_alias)
 
-    def has_key(self, key: str) -> bool:
+    def key_exists(self, key: str) -> bool:
         return self.search_engine.exists(self.index_name, id=key)
 
     def add(self, key: str, value: Any, ttl: int = None) -> bool:
@@ -37,9 +37,10 @@ class SearchEngineCache(BaseCache):
             Returns:
                 bool: True adicionou, ou seja, se ainda não existia. False se já existia.
         """
-        if self.has_key(key):
+        if self.key_exists(key):
             return False
-        self.search_engine.create(self.index_name, body={'value': value, 'ttl': self.get_ttl(ttl)}, id=key, refresh=self.refresh)
+        body = {'value': value, 'ttl': self.get_ttl(ttl)}
+        self.search_engine.create(self.index_name, body=body, id=key, refresh=self.refresh)
         return True
 
     def get(self, key: str, default: Any = None) -> Any:
@@ -56,10 +57,11 @@ class SearchEngineCache(BaseCache):
     def set(self, key: str, value: Any, ttl: int = None) -> None:
         if type(value) == bytes:
             raise ValueError("Não suporta salvar bytes")
-        self.search_engine.index(self.index_name, body={'value': value, 'ttl': self.get_ttl(ttl)}, id=key, refresh=self.refresh)
+        body = {'value': value, 'ttl': self.get_ttl(ttl)}
+        self.search_engine.index(self.index_name, body=body, id=key, refresh=self.refresh)
 
     def touch(self, key: str, ttl: int = None) -> bool:
-        if self.has_key(key):
+        if self.key_exists(key):
             self.search_engine.index(self.index_name, body={'ttl': self.get_ttl(ttl)}, id=key, refresh=self.refresh)
             return True
         return False
@@ -76,9 +78,11 @@ class SearchEngineCache(BaseCache):
         raise NotImplementedError("subclasses of BaseCache must provide a clear() method")
 
     def get_many(self, keys: List[str]) -> Dict[str, Any]:
-        """ Fetch a bunch of keys from the cache. For certain backends (memcached, pgsql) this can be *much* faster when fetching multiple values.
+        """ Fetch a bunch of keys from the cache. For certain backends (memcached, pgsql) this can be *much* faster
+            when fetching multiple values.
 
-            Return a dict mapping each key in keys to its value. If the given key is missing, it will be missing from the response dict.
+            Return a dict mapping each key in keys to its value. If the given key is missing, it will be missing from
+            the response dict.
         """
         response = self.search_engine.mget({'ids': [k for k in keys]}, index=self.index_name)
-        return {x['_id']:x['_source']['value'] for x in response['docs'] if x['found']}
+        return {x['_id']: x['_source']['value'] for x in response['docs'] if x['found']}

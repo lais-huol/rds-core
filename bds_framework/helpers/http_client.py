@@ -1,11 +1,8 @@
-from typing import Dict, List, Any, Optional, Union, Tuple, Callable
+from typing import Dict, List, Any, Optional, Union
 import json
 from http.client import HTTPException as OriginalHTTPException
 import requests
-from requests import PreparedRequest
-from requests.auth import AuthBase
 from bds_framework.config import settings
-from requests.structures import CaseInsensitiveDict
 
 DEFAULT_HEADERS: Dict[str, Any] = settings.get('DEFAULT_HEADERS', {})
 
@@ -20,7 +17,7 @@ class HTTPException(OriginalHTTPException):
         self.reason = reason
         self.request_headers = request_headers
         self.response_headers = response_headers
-    
+
 
 def get(url: str, headers: Dict[str, str] = {}, encoding: str = 'utf-8', decode: bool = True, **kwargs) -> Any:
 

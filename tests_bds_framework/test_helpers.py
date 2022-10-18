@@ -12,7 +12,8 @@ TEST_DEFAULT_HEADERS = {
     'Cookie': '',
     'Host': 'cnes.datasus.gov.br',
     'Referer': 'http://cnes.datasus.gov.br/pages/estabelecimentos/consulta.jsp',
-    'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/104.0.5112.101 Safari/537.36',
+    'User-Agent':
+        'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/104.0.5112.101 Safari/537.36',
 }
 
 

@@ -1,5 +1,5 @@
 from typing import Any, List, Dict
-from bds_framework.cache.base import DEFAULT_TTL, BaseCache
+from bds_framework.cache.base import BaseCache
 
 
 class NoCache(BaseCache):

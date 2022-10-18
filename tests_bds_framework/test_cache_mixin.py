@@ -1,16 +1,8 @@
 import datetime
-import time
-import unittest
 from bds_framework.cache import caches
 
 
 class TestCacheMixin:
-    # # A common set of tests_framework_tests to apply to all cache backends
-    # factory = RequestFactory()
-
-    # Some clients raise custom exceptions when .incr() or .decr() are called
-    # with a non-integer value.
-    incr_decr_type_error = TypeError
 
     def __init__(self, methodName: str = 'runTest'):
         from bds_framework.cache.nocache import NoCache
@@ -24,10 +16,10 @@ class TestCacheMixin:
     def tearDown(self):
         self.cache.clear()
 
-    def test_has_key(self):
-        self.assertFalse(self.cache.has_key("test_has_key"))
+    def test_key_exists(self):
+        self.assertFalse(self.cache.key_exists("test_has_key"))
         self.cache.add("test_has_key", 'value')
-        self.assertTrue(self.cache.has_key("test_has_key"))
+        self.assertTrue(self.cache.key_exists("test_has_key"))
 
     def test_add(self):
         self.assertTrue(self.cache.add("test_add", "value"))
@@ -92,7 +84,7 @@ class TestCacheMixin:
         self.assertEquals(self.cache.get("test_datatype_tuple"), [1, 2, 3, 500, 4])
 
     def test_datatype_dict_simples(self):
-        d = {'a': 1, 'b': '1', 'c':2.0}
+        d = {'a': 1, 'b': '1', 'c': 2.0}
         self.cache.set("test_datatype_dict_simples", d)
         self.assertEquals(self.cache.get("test_datatype_dict_simples"), d)
 
@@ -129,7 +121,6 @@ class TestCacheMixin:
         self.assertEquals(self.cache.get("test_datatype_dict_complexo"), complex_dict_voltar)
 
     def test_prefix(self):
-        from bds_framework.cache import caches
         self.cache.set("somekey", "value")
         self.assertEquals(caches[self.cache_name].get("somekey"), "value")
 
