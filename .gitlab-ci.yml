@@ -7,6 +7,17 @@
 # See https://docs.gitlab.com/ee/ci/variables/#cicd-variable-precedence
 stages:
 - test
+- deploy
+
+python-deploy:
+  image: registry.lais.huol.ufrn.br/sistemas-internos/python_package_deploy:1-0-5
+  stage: deploy
+  script:
+    - sed -i "s/LIB_VERSION/$CI_COMMIT_TAG/g" setup.py
+    - python setup.py sdist bdist_wheel
+    - TWINE_PASSWORD=${CI_JOB_TOKEN} TWINE_USERNAME=gitlab-ci-token python -m twine upload --repository-url ${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/pypi dist/*
+  only:
+    - tags
 sast:
   stage: test
 include:
