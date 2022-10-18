@@ -33,10 +33,3 @@ CACHES:
       search_engine_alias: 'default'
       index_name: 'test_index_cache'
       refresh: 'wait_for'
-  base_case:
-    BACKEND: 'bds_framework.cache.base.BaseCache'
-    OPTIONS:
-      ttl: 60
-      search_engine_alias: 'default'
-      index_name: 'test_index_cache'
-      refresh: 'wait_for'
