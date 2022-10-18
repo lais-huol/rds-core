@@ -45,8 +45,6 @@ class SearchEngineCache(BaseCache):
     def get(self, key: str, default: Any = None) -> Any:
         try:
             response = self.search_engine.get(self.index_name, key)
-            if '_source' in response['_source']:
-                return default
             doc = response['_source']
             # ttl = doc['ttl']
             return doc['value'] if doc['value'] is not None else default
