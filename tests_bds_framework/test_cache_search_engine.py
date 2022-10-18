@@ -21,8 +21,7 @@ class TestSearchEngineCache(TestCacheMixin, unittest.TestCase):
         super().setUp()
 
     def tearDown(self):
-        # delete_index_if_exists(self.test_index)
-        pass
+        delete_index_if_exists(self.test_index)
 
     def test_clear(self):
         with pytest.raises(Exception):
