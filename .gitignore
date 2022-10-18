@@ -1,4 +1,5 @@
 coverage/
+statictypecheck/
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
@@ -37,7 +38,7 @@ MANIFEST
 pip-log.txt
 pip-delete-this-directory.txt
 
-# Unit test / coverage reports
+# Unit testes / coverage reports
 htmlcov/
 .tox/
 .coverage
