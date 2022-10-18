@@ -1,4 +1,5 @@
 coverage/
+htmlcov/
 statictypecheck/
 
 # Byte-compiled / optimized / DLL files

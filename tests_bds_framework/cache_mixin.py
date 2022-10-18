@@ -4,11 +4,11 @@ from bds_framework.cache import caches
 
 class TestCacheMixin:
 
-    def __init__(self, methodName: str = 'runTest'):
+    def __init__(self, method_name: str = 'runTest') -> None:
         from bds_framework.cache.nocache import NoCache
         self.cache = NoCache()
         self.cache_name = 'default'
-        super().__init__(methodName)
+        super().__init__(method_name)
 
     def setUp(self):
         super().setUp()
@@ -45,7 +45,7 @@ class TestCacheMixin:
         """If None is cached, get() returns it instead of the default."""
         self.cache.set("test_default_used_when_none_is_set", None)
         self.assertIsNone(self.cache.get("test_default_used_when_none_is_set"))
-        self.assertEquals(self.cache.get("test_default_used_when_none_is_set", default="default"), "default")
+        self.assertEqual(self.cache.get("test_default_used_when_none_is_set", default="default"), "default")
 
     def test_datatype__bool(self):
         self.cache.set("test_datatype__bool", True)
@@ -55,38 +55,38 @@ class TestCacheMixin:
 
     def test_datatype_str(self):
         self.cache.set("test_datatype_str", 'string')
-        self.assertEquals(self.cache.get("test_datatype_str"), 'string')
+        self.assertEqual(self.cache.get("test_datatype_str"), 'string')
 
     def test_datatype_int(self):
         self.cache.set("test_datatype_int", 123)
-        self.assertEquals(self.cache.get("test_datatype_int"), 123)
+        self.assertEqual(self.cache.get("test_datatype_int"), 123)
 
     def test_datatype_float(self):
         self.cache.set("test_datatype_float", 1.23)
-        self.assertEquals(self.cache.get("test_datatype_float"), 1.23)
+        self.assertEqual(self.cache.get("test_datatype_float"), 1.23)
 
     def test_datatype_date(self):
         hoje = datetime.date.today()
         self.cache.set("test_datatype_date", hoje)
-        self.assertEquals(self.cache.get("test_datatype_date"), hoje.isoformat())
+        self.assertEqual(self.cache.get("test_datatype_date"), hoje.isoformat())
 
     def test_datatype_datetime(self):
         agorinha = datetime.datetime.now()
         self.cache.set("test_datatype_datetime", agorinha)
-        self.assertEquals(self.cache.get("test_datatype_datetime"), agorinha.isoformat())
+        self.assertEqual(self.cache.get("test_datatype_datetime"), agorinha.isoformat())
 
     def test_datatype_list(self):
         self.cache.set("test_datatype_list", [1, 2, 3, 500, 4])
-        self.assertEquals(self.cache.get("test_datatype_list"), [1, 2, 3, 500, 4])
+        self.assertEqual(self.cache.get("test_datatype_list"), [1, 2, 3, 500, 4])
 
     def test_datatype_tuple(self):
         self.cache.set("test_datatype_tuple", (1, 2, 3, 500, 4))
-        self.assertEquals(self.cache.get("test_datatype_tuple"), [1, 2, 3, 500, 4])
+        self.assertEqual(self.cache.get("test_datatype_tuple"), [1, 2, 3, 500, 4])
 
     def test_datatype_dict_simples(self):
         d = {'a': 1, 'b': '1', 'c': 2.0}
         self.cache.set("test_datatype_dict_simples", d)
-        self.assertEquals(self.cache.get("test_datatype_dict_simples"), d)
+        self.assertEqual(self.cache.get("test_datatype_dict_simples"), d)
 
     def test_datatype_dict_complexo(self):
         hoje = datetime.date.today()
@@ -118,11 +118,11 @@ class TestCacheMixin:
         }
 
         self.cache.set("test_datatype_dict_complexo", complex_dict_vai)
-        self.assertEquals(self.cache.get("test_datatype_dict_complexo"), complex_dict_voltar)
+        self.assertEqual(self.cache.get("test_datatype_dict_complexo"), complex_dict_voltar)
 
     def test_prefix(self):
         self.cache.set("somekey", "value")
-        self.assertEquals(caches[self.cache_name].get("somekey"), "value")
+        self.assertEqual(caches[self.cache_name].get("somekey"), "value")
 
     def test_delete(self):
         self.assertIsNone(self.cache.set("test_delete", "spam"))

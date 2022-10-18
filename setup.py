@@ -29,11 +29,6 @@ requirements = [
     'opensearch_dsl==2.0.1',
     'elasticsearch==7.17.6',
     'elasticsearch_dsl==7.4.0',
-
-    # Dev
-    'pytest>=7.1.3',
-    'pytest-cov>=4.0.0',
-    'pytest-profiling>=1.7.0',
 ]
 
 with open("requirements.txt", "w") as file1:
@@ -44,6 +39,9 @@ with open("requirements.txt", "w") as file1:
     file1.write("lxml")
     file1.write("flake8")
     file1.write("types-requests")
+    file1.write("pytest>=7.1.3")
+    file1.write("pytest-cov>=4.0.0")
+    file1.write("pytest-profiling>=1.7.0")
 
 setup(
     name='bds-framework',

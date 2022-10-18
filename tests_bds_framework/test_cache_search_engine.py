@@ -2,13 +2,13 @@ import unittest
 import pytest
 from bds_framework.cache import caches
 from bds_framework.searchengine import create_index_if_not_exists, delete_index_if_exists
-from tests_bds_framework.test_cache_mixin import TestCacheMixin
+from tests_bds_framework.cache_mixin import TestCacheMixin
 
 
 class TestSearchEngineCache(TestCacheMixin, unittest.TestCase):
 
-    def __init__(self, methodName: str = 'runTest'):
-        super(TestSearchEngineCache, self).__init__(methodName)
+    def __init__(self, method_name: str = 'runTest') -> None:
+        super(TestSearchEngineCache, self).__init__(method_name)
         self.test_index = 'test_index_cache'
         self.cache = caches['search_engine']
         self.cache_name = 'search_engine'
