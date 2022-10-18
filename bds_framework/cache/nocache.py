@@ -1,3 +1,4 @@
+from typing import Any, List
 from bds_framework.cache.base import DEFAULT_TTL, BaseCache
 
 
@@ -14,14 +15,14 @@ class NoCache(BaseCache):
     def set(self, key, value, ttl=DEFAULT_TTL, version=None):
         pass
 
-    def touch(self, key, ttl=DEFAULT_TTL, version=None):
-        return False
+    def delete(self, key, version=None) -> None:
+        return
 
-    def delete(self, key, version=None):
-        return False
+    # def touch(self, key, ttl=DEFAULT_TTL, version=None):
+    #     return False
+    #
+    # def has_key(self, key, version=None):
+    #     return False
 
-    def has_key(self, key, version=None):
-        return False
-
-    def clear(self):
-        pass
+    def clear(self) -> None:
+        return
