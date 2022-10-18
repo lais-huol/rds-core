@@ -37,6 +37,8 @@ class TestCacheMixin:
     def test_get(self):
         self.assertTrue(self.cache.add("test_get", "value1"))
         self.assertEqual(self.cache.get("test_get"), 'value1')
+        self.assertIsNone(self.cache.get("test_get_invalid"))
+        self.assertEqual(self.cache.get("test_get_invalid", 'value1'), 'value1')
 
     def test_get_missing_key(self):
         self.assertEqual(self.cache.get("test_get_missing_key", 'key not exists'), 'key not exists')
@@ -255,108 +257,100 @@ class TestCacheMixin:
         self.assertEqual(self.cache.decr("test_decr"), 3)
         self.assertEqual(self.cache.decr("test_decr", 2), 1)
 
-    # # def test_long_ttl(self):
-    # #     """
-    # #     Follow memcached's convention where a ttl greater than 30 days is
-    # #     treated as an absolute expiration timestamp instead of a relative
-    # #     offset (#12399).
-    # #     """
-    # #     self.cache.set("key1", "eggs", 60 * 60 * 24 * 30 + 1)  # 30 days + 1 second
-    # #     self.assertEqual(self.cache.get("key1"), "eggs")
-    # #
-    # #     self.assertIs(self.cache.add("key2", "ham", 60 * 60 * 24 * 30 + 1), True)
-    # #     self.assertEqual(self.cache.get("key2"), "ham")
-    # #
-    # #     self.cache.set_many(
-    # #         {"key3": "sausage", "key4": "lobster bisque"}, 60 * 60 * 24 * 30 + 1
-    # #     )
-    # #     self.assertEqual(self.cache.get("key3"), "sausage")
-    # #     self.assertEqual(self.cache.get("key4"), "lobster bisque")
-    # #
-    # # def test_forever_ttl(self):
-    # #     """
-    # #     Passing in None into ttl results in a value that is cached forever
-    # #     """
-    # #     self.cache.set("key1", "eggs", None)
-    # #     self.assertEqual(self.cache.get("key1"), "eggs")
-    # #
-    # #     self.assertIs(self.cache.add("key2", "ham", None), True)
-    # #     self.assertEqual(self.cache.get("key2"), "ham")
-    # #     self.assertIs(self.cache.add("key1", "new eggs", None), False)
-    # #     self.assertEqual(self.cache.get("key1"), "eggs")
-    # #
-    # #     self.cache.set_many({"key3": "sausage", "key4": "lobster bisque"}, None)
-    # #     self.assertEqual(self.cache.get("key3"), "sausage")
-    # #     self.assertEqual(self.cache.get("key4"), "lobster bisque")
-    # #
-    # #     self.cache.set("key5", "belgian fries", ttl=1)
-    # #     self.assertIs(self.cache.touch("key5", ttl=None), True)
-    # #     time.sleep(2)
-    # #     self.assertEqual(self.cache.get("key5"), "belgian fries")
-    # #
-    # # def test_zero_ttl(self):
-    # #     """
-    # #     Passing in zero into ttl results in a value that is not cached
-    # #     """
-    # #     self.cache.set("key1", "eggs", 0)
-    # #     self.assertIsNone(self.cache.get("key1"))
-    # #
-    # #     self.assertIs(self.cache.add("key2", "ham", 0), True)
-    # #     self.assertIsNone(self.cache.get("key2"))
-    # #
-    # #     self.cache.set_many({"key3": "sausage", "key4": "lobster bisque"}, 0)
-    # #     self.assertIsNone(self.cache.get("key3"))
-    # #     self.assertIsNone(self.cache.get("key4"))
-    # #
-    # #     self.cache.set("key5", "belgian fries", ttl=5)
-    # #     self.assertIs(self.cache.touch("key5", ttl=0), True)
-    # #     self.assertIsNone(self.cache.get("key5"))
-    # #
-    # # def test_float_ttl(self):
-    # #     # Make sure a ttl given as a float doesn't crash anything.
-    # #     self.cache.set("key1", "spam", 100.2)
-    # #     self.assertEqual(self.cache.get("key1"), "spam")
-    # #
-    # # def test_set_many_expiration(self):
-    # #     # set_many takes a second ``ttl`` parameter
-    # #     self.cache.set_many({"key1": "spam", "key2": "eggs"}, 1)
-    # #     time.sleep(2)
-    # #     self.assertIsNone(self.cache.get("key1"))
-    # #     self.assertIsNone(self.cache.get("key2"))
-    # #
-    # # def test_expiration(self):
-    # #     # Cache values can be set to expire
-    # #     self.cache.set("expire1", "very quickly", 1)
-    # #     self.cache.set("expire2", "very quickly", 1)
-    # #     self.cache.set("expire3", "very quickly", 1)
-    # #
-    # #     time.sleep(2)
-    # #     self.assertIsNone(self.cache.get("expire1"))
-    # #
-    # #     self.assertIs(self.cache.add("expire2", "newvalue"), True)
-    # #     self.assertEqual(self.cache.get("expire2"), "newvalue")
-    # #     self.assertIs(self.cache.has_key("expire3"), False)
-    # #
-    # # def test_touch(self):
-    # #     # default_cache.touch() updates the ttl.
-    # #     self.cache.set("expire1", "very quickly", ttl=1)
-    # #     self.assertIs(self.cache.touch("expire1", ttl=4), True)
-    # #     time.sleep(2)
-    # #     self.assertIs(self.cache.has_key("expire1"), True)
-    # #     time.sleep(3)
-    # #     self.assertIs(self.cache.has_key("expire1"), False)
-    # #     # default_cache.touch() works without the ttl argument.
-    # #     self.cache.set("expire1", "very quickly", ttl=1)
-    # #     self.assertIs(self.cache.touch("expire1"), True)
-    # #     time.sleep(2)
-    # #     self.assertIs(self.cache.has_key("expire1"), True)
-    # #
-    # #     self.assertIs(self.cache.touch("nonexistent"), False)
-
-
-class TestBaseBaseCase(TestCacheMixin):
-
-    def __init__(self, method_nname: str = 'runTest'):
-        super().__init__(methodName=method_nname)
-    def test_a(self):
-        pass
+    # def test_long_ttl(self):
+    #     """
+    #     Follow memcached's convention where a ttl greater than 30 days is
+    #     treated as an absolute expiration timestamp instead of a relative
+    #     offset (#12399).
+    #     """
+    #     self.cache.set("key1", "eggs", 60 * 60 * 24 * 30 + 1)  # 30 days + 1 second
+    #     self.assertEqual(self.cache.get("key1"), "eggs")
+    #
+    #     self.assertIs(self.cache.add("key2", "ham", 60 * 60 * 24 * 30 + 1), True)
+    #     self.assertEqual(self.cache.get("key2"), "ham")
+    #
+    #     self.cache.set_many(
+    #         {"key3": "sausage", "key4": "lobster bisque"}, 60 * 60 * 24 * 30 + 1
+    #     )
+    #     self.assertEqual(self.cache.get("key3"), "sausage")
+    #     self.assertEqual(self.cache.get("key4"), "lobster bisque")
+    #
+    # def test_forever_ttl(self):
+    #     """
+    #     Passing in None into ttl results in a value that is cached forever
+    #     """
+    #     self.cache.set("key1", "eggs", None)
+    #     self.assertEqual(self.cache.get("key1"), "eggs")
+    #
+    #     self.assertIs(self.cache.add("key2", "ham", None), True)
+    #     self.assertEqual(self.cache.get("key2"), "ham")
+    #     self.assertIs(self.cache.add("key1", "new eggs", None), False)
+    #     self.assertEqual(self.cache.get("key1"), "eggs")
+    #
+    #     self.cache.set_many({"key3": "sausage", "key4": "lobster bisque"}, None)
+    #     self.assertEqual(self.cache.get("key3"), "sausage")
+    #     self.assertEqual(self.cache.get("key4"), "lobster bisque")
+    #
+    #     self.cache.set("key5", "belgian fries", ttl=1)
+    #     self.assertIs(self.cache.touch("key5", ttl=None), True)
+    #     time.sleep(2)
+    #     self.assertEqual(self.cache.get("key5"), "belgian fries")
+    #
+    # def test_zero_ttl(self):
+    #     """
+    #     Passing in zero into ttl results in a value that is not cached
+    #     """
+    #     self.cache.set("key1", "eggs", 0)
+    #     self.assertIsNone(self.cache.get("key1"))
+    #
+    #     self.assertIs(self.cache.add("key2", "ham", 0), True)
+    #     self.assertIsNone(self.cache.get("key2"))
+    #
+    #     self.cache.set_many({"key3": "sausage", "key4": "lobster bisque"}, 0)
+    #     self.assertIsNone(self.cache.get("key3"))
+    #     self.assertIsNone(self.cache.get("key4"))
+    #
+    #     self.cache.set("key5", "belgian fries", ttl=5)
+    #     self.assertIs(self.cache.touch("key5", ttl=0), True)
+    #     self.assertIsNone(self.cache.get("key5"))
+    #
+    # def test_float_ttl(self):
+    #     # Make sure a ttl given as a float doesn't crash anything.
+    #     self.cache.set("key1", "spam", 100.2)
+    #     self.assertEqual(self.cache.get("key1"), "spam")
+    #
+    # def test_set_many_expiration(self):
+    #     # set_many takes a second ``ttl`` parameter
+    #     self.cache.set_many({"key1": "spam", "key2": "eggs"}, 1)
+    #     time.sleep(2)
+    #     self.assertIsNone(self.cache.get("key1"))
+    #     self.assertIsNone(self.cache.get("key2"))
+    #
+    # def test_expiration(self):
+    #     # Cache values can be set to expire
+    #     self.cache.set("expire1", "very quickly", 1)
+    #     self.cache.set("expire2", "very quickly", 1)
+    #     self.cache.set("expire3", "very quickly", 1)
+    #
+    #     time.sleep(2)
+    #     self.assertIsNone(self.cache.get("expire1"))
+    #
+    #     self.assertIs(self.cache.add("expire2", "newvalue"), True)
+    #     self.assertEqual(self.cache.get("expire2"), "newvalue")
+    #     self.assertIs(self.cache.has_key("expire3"), False)
+    #
+    # def test_touch(self):
+    #     # default_cache.touch() updates the ttl.
+    #     self.cache.set("expire1", "very quickly", ttl=1)
+    #     self.assertIs(self.cache.touch("expire1", ttl=4), True)
+    #     time.sleep(2)
+    #     self.assertIs(self.cache.has_key("expire1"), True)
+    #     time.sleep(3)
+    #     self.assertIs(self.cache.has_key("expire1"), False)
+    #     # default_cache.touch() works without the ttl argument.
+    #     self.cache.set("expire1", "very quickly", ttl=1)
+    #     self.assertIs(self.cache.touch("expire1"), True)
+    #     time.sleep(2)
+    #     self.assertIs(self.cache.has_key("expire1"), True)
+    #
+    #     self.assertIs(self.cache.touch("nonexistent"), False)
