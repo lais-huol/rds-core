@@ -40,9 +40,6 @@ class TestCacheMixin:
         self.assertIsNone(self.cache.get("test_get_invalid"))
         self.assertEqual(self.cache.get("test_get_invalid", 'value1'), 'value1')
 
-    def test_get_missing_key(self):
-        self.assertEqual(self.cache.get("test_get_missing_key", 'key not exists'), 'key not exists')
-
     def test_set(self):
         self.assertIsNone(self.cache.set("test_set", "value1"))
         self.assertEqual(self.cache.get("test_set"), 'value1')
