@@ -27,7 +27,7 @@ requirements = [
     # Search engine
     'opensearch_py==2.0.0',
     'opensearch_dsl==2.0.1',
-    'elasticsearch==8.4.3',
+    'elasticsearch==7.17.6',
     'elasticsearch_dsl==7.4.0',
 
     # Dev
