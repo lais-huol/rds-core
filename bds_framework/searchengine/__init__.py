@@ -1,3 +1,7 @@
+"""
+Documentar.
+"""
+
 import datetime
 from typing import Dict, Union, Any, List
 import opensearchpy

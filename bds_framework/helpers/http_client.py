@@ -1,3 +1,7 @@
+"""
+Documentar.
+"""
+
 from typing import Dict, List, Any, Optional, Union
 import json
 from http.client import HTTPException as OriginalHTTPException

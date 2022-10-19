@@ -1,3 +1,7 @@
+"""
+Documentar.
+"""
+
 from typing import Any, List, Dict
 from bds_framework.cache.base import BaseCache
 

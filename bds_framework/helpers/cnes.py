@@ -1,3 +1,6 @@
+"""
+Documentar.
+"""
 
 def is_cpf_or_cns(cpf_or_cns: str) -> str:
     if len(cpf_or_cns) == 15:

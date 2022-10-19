@@ -1,3 +1,7 @@
+"""
+Documentar.
+"""
+
 from typing import Any, List, Dict
 
 import opensearchpy
