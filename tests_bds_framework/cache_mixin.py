@@ -2,7 +2,7 @@ import datetime
 from bds_framework.cache import caches
 
 
-class TestCacheMixin:
+class CacheMixin:
 
     def __init__(self, method_name: str = 'runTest') -> None:
         from bds_framework.cache.nocache import NoCache
