@@ -45,22 +45,12 @@ unit-test:
 
 
 documentation:
-  stage: test
+  stage: publish
   image: python:3.10
   script:
+    - sed -i 's@!!gitlabpages!!@'${CI_PAGES_URL}'@' public/index.html
     - pip install pdoc3
     - pdoc --html -o docs --config show_source_code=False --force bds_framework/
-  artifacts:
-    paths:
-      - docs
-    expire_in: 30 days
-  allow_failure: true
-
-
-pages:
-  stage: publish
-  script:
-    - sed -i 's@!!gitlabpages!!@'${CI_PAGES_URL}'@' public/index.html
 #    - mkdir -p public/coverage
 #    - mv coverage/* public/coverage/
     - mkdir -p public/docs
