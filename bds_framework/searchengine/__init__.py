@@ -1,3 +1,7 @@
+"""
+Documentar.
+"""
+
 import datetime
 from typing import Dict, Union, Any, List
 import opensearchpy
@@ -7,7 +11,7 @@ from bds_framework.config import settings
 from bds_framework.helpers import instantiate_class
 
 
-__search_engine_cache = {}
+__search_engine_cache: Dict[str, Any] = {}
 
 
 def get_search_engine_config(alias: str = 'default') -> DynaBox:
@@ -23,8 +27,8 @@ def search_engine(alias: str = 'default') -> Union[opensearchpy.OpenSearch, elas
         engine = se_config['engine']
         params = {k: v for k, v in se_config.items() if
                   k not in ('username', 'password', 'engine', 'dsl_engine', 'hosts')}
-        client = instantiate_class(engine, se_config['hosts'].split(','),
-                                   http_auth=(se_config['username'], se_config['password']), **params)
+        params['http_auth'] = (se_config['username'], se_config['password'])
+        client = instantiate_class(engine, se_config['hosts'].split(','), **params)
         __search_engine_cache[alias] = client
     return __search_engine_cache[alias]
 
@@ -120,7 +124,7 @@ def index(index_name: str,
           body: Dict,
           _id: Any = None,
           alias: str = "default",
-          **kwargs) -> Dict:
+          **kwargs) -> Union[Any, Any]:
     response = search_engine(alias).index(
         index=index_name,
         body=body,

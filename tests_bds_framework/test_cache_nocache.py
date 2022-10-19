@@ -19,9 +19,9 @@ class NoCacheTests(unittest.TestCase):
     def test_add(self):
         self.assertTrue(self.cache.add("addkey1", "value"))
 
-    def test_has_key(self):
+    def test_key_exists(self):
         self.assertTrue(self.cache.add("test_has_key", 'value'))
-        self.assertFalse(self.cache.has_key("test_has_key"))
+        self.assertFalse(self.cache.key_exists("test_has_key"))
 
     def test_get(self):
         self.assertTrue(self.cache.add("test_get", "value1"))
@@ -65,7 +65,7 @@ class NoCacheTests(unittest.TestCase):
         self.assertIsNone(self.cache.set("test_datatype_tuple", (1, 2, 3, 500, 4)))
 
     def test_datatype_dict_simples(self):
-        self.assertIsNone(self.cache.set("test_datatype_dict_simples", {'a': 1, 'b': '1', 'c':2.0}))
+        self.assertIsNone(self.cache.set("test_datatype_dict_simples", {'a': 1, 'b': '1', 'c': 2.0}))
 
     def test_delete(self):
         self.assertIsNone(self.cache.set("test_delete", "spam"))
@@ -103,7 +103,7 @@ class NoCacheTests(unittest.TestCase):
 
     def test_binary_string(self):
         # Binary strings should be cacheable
-        from zlib import compress, decompress
+        from zlib import compress
 
         value = "value_to_be_compressed"
         compressed_value = compress(value.encode())

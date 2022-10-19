@@ -1,4 +1,6 @@
 coverage/
+artifacts/
+/docs/
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
@@ -37,7 +39,7 @@ MANIFEST
 pip-log.txt
 pip-delete-this-directory.txt
 
-# Unit test / coverage reports
+# Unit tests_bds_framework / coverage reports
 htmlcov/
 .tox/
 .coverage
@@ -110,3 +112,5 @@ local.properties
 
 # TeXlipse plugin
 .texlipse
+
+Pipfile

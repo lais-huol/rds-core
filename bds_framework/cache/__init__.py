@@ -1,3 +1,7 @@
+"""
+Documentar.
+"""
+
 import dynaconf
 from bds_framework.config import settings
 from bds_framework.helpers import instantiate_class

@@ -1,28 +1,26 @@
-from typing import Any, List
-from bds_framework.cache.base import DEFAULT_TTL, BaseCache
+"""
+Documentar.
+"""
+
+from typing import Any, List, Dict
+from bds_framework.cache.base import BaseCache
 
 
 class NoCache(BaseCache):
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args: List, **kwargs: Dict[str, Any]) -> None:
         super().__init__(*args, **kwargs)
 
-    def add(self, key, value, ttl=DEFAULT_TTL, version=None):
+    def add(self, key: str, value: Any, ttl: int = None) -> bool:
         return True
 
-    def get(self, key, default=None, version=None):
+    def get(self, key: str, default: Any = None) -> Any:
         return default
 
-    def set(self, key, value, ttl=DEFAULT_TTL, version=None):
+    def set(self, key: str, value: Any, ttl: int = None) -> None:
         pass
 
-    def delete(self, key, version=None) -> None:
+    def delete(self, key: str) -> None:
         return
-
-    # def touch(self, key, ttl=DEFAULT_TTL, version=None):
-    #     return False
-    #
-    # def has_key(self, key, version=None):
-    #     return False
 
     def clear(self) -> None:
         return
