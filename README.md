@@ -80,3 +80,15 @@ Agora é só instalar normalmente usando `pip install -r requirements.txt`, como
 
 1. Para saber se a documentação pydocs `pdoc --html -o artifacts/pydocs --config show_source_code=False --force bds/`
 2. Ao subir o código a documentação está pública em .
+
+
+## Tipo de commits
+
+- `feat:` novas funcionalidades.
+- `fix:` correção de bugs.
+- `refactor:` refatoração ou performances (sem impacto em lógica).
+- `style:` estilo ou formatação de código (sem impacto em lógica).
+- `test:` testes.
+- `doc:` documentação no código ou do repositório.
+- `env:` CI/CD ou settings.
+- `build:` build ou dependências.
