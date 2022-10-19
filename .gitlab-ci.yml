@@ -49,7 +49,7 @@ documentation:
   image: python:3.10
   script:
     - sed -i 's@!!gitlabpages!!@'${CI_PAGES_URL}'@' public/index.html
-    - pip install pdoc3
+    - pip install -r requirements.txt
     - pdoc --html -o docs --config show_source_code=False --force bds_framework/
 #    - mkdir -p public/coverage
 #    - mv coverage/* public/coverage/

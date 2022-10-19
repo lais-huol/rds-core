@@ -42,6 +42,7 @@ with open("requirements.txt", "w") as file1:
     file1.write("pytest>=7.1.3")
     file1.write("pytest-cov>=4.0.0")
     file1.write("pytest-profiling>=1.7.0")
+    file1.write("pdoc3")
 
 setup(
     name='bds-framework',
