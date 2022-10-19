@@ -60,13 +60,14 @@ documentation:
 pages:
   stage: publish
   script:
+    - sed -i 's@!!gitlabpages!!@'${CI_PAGES_URL}'@' public/index.html
 #    - mkdir -p public/coverage
 #    - mv coverage/* public/coverage/
     - mkdir -p public/docs
     - mv docs/* public/docs/
   artifacts:
     paths:
-      - docs
+      - public
     expire_in: 30 days
   allow_failure: true
 
