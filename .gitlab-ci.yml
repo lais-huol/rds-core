@@ -1,7 +1,7 @@
 stages:
-#  - test
-#  - publish
-#  - deploy
+  - test
+  - publish
+  - deploy
   - pages
 
 
@@ -17,3 +17,79 @@ lint:
     expire_in: 30 days
   allow_failure: true
 
+
+
+static-type-check:
+  stage: test
+  image: python:3.10
+  script:
+    - pip install mypy lxml
+    - mypy --warn-unused-configs --python-version 3.10 --show-error-context --show-column-numbers --show-error-end --show-error-codes --pretty --html-report artifacts/statictypecheck --cobertura-xml-report statictypecheck bds_framework
+    # --disallow-untyped-calls --disallow-untyped-defs
+  artifacts:
+    paths:
+      - artifacts
+    reports:
+      coverage_report:
+        coverage_format: cobertura
+        path: coverage/cobertura-coverage.xml
+    expire_in: 30 days
+  allow_failure: true
+
+
+unit-test:
+  stage: test
+  image: python:3.10
+  script:
+    - pip install -r requirements.txt
+    - python -m pytest
+  coverage: '/(?i)total.*? (100(?:\.0+)?\%|[1-9]?\d(?:\.\d+)?\%)$/'
+  artifacts:
+    paths:
+      - coverage/
+    reports:
+      coverage_report:
+        coverage_format: cobertura
+        path: coverage/cobertura-coverage.xml
+    expire_in: 180 days
+  allow_failure: true
+
+
+python-deploy:
+  image: registry.lais.huol.ufrn.br/sistemas-internos/python_package_deploy:1-0-5
+  stage: deploy
+  script:
+    - sed -i "s/version='.*',/version='$CI_COMMIT_TAG',/g" setup.py
+    - python setup.py sdist bdist_wheel
+    - TWINE_PASSWORD=${CI_JOB_TOKEN} TWINE_USERNAME=gitlab-ci-token python -m twine upload --repository-url ${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/pypi dist/*
+  only:
+    - tags
+
+
+pages:
+  stage: pages
+  image: python:3.10
+  script:
+    - sed -i 's/!!gitlabpages!!/'${CI_PAGES_URL}'/g' public/index.html
+    - pip install pdoc3
+    - pdoc --html -o artifacts/pydocs --config show_source_code=False --force bds/
+  artifacts:
+    paths:
+      - public
+  rules:
+    - if: $CI_COMMIT_REF_NAME == $CI_DEFAULT_BRANCH
+  allow_failure: true
+
+
+# SAST customization: https://docs.gitlab.com/ee/user/application_security/sast/#customizing-the-sast-settings
+# Secret Detection customization: https://docs.gitlab.com/ee/user/application_security/secret_detection/#customizing-settings
+# Dependency Scanning customization: https://docs.gitlab.com/ee/user/application_security/dependency_scanning/#customizing-the-dependency-scanning-settings
+# Container Scanning customization: https://docs.gitlab.com/ee/user/application_security/container_scanning/#customizing-the-container-scanning-settings
+# Note that environment variables can be set in several places
+# See https://docs.gitlab.com/ee/ci/variables/#cicd-variable-precedence
+
+sast:
+  stage: test
+
+include:
+  - template: Security/SAST.gitlab-ci.yml
