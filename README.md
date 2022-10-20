@@ -64,23 +64,26 @@ Agora é só instalar normalmente usando `pip install -r requirements.txt`, como
 
 > Daqui para frente entende-se o uso do Linux ou Mac. Fique à vontade para documentar para Windows. 
 
-1. Crie um ambiente virtual usando `mkvirtualenv bds-framework` ou da formas que você está aconstumado a usar 
-2. Clone o projeto `git clone ssh://git@git.lais.huol.ufrn.br:2222/barramento/barramento-v2/bds-framework.git`
-3. Entre com o código `cd bds-framework`
-4. Instale os pacotes `pip install -r requirements`
-5. Crie um branch para a issue em que você está vai trabalhar, no exemplo de ser a issue 4: `git checkout -b issue4`  
-6. Codifique como de costume
-7. Antes de fazer um push para o Gitlab confira a qualidade do código (todos serão gerados e salvos no servidor)
+1. Clone o projeto **bds-search** `ssh://git@git.lais.huol.ufrn.br:2222/barramento/bds-search.git` para ter uma
+instância de desenvolvimento do OpenSearch, do OpenSearch Dashboards e do Redis (mais instruções no próprio projeto)
+2. Deixe o **bds-search** com o OpenSearch e o Redis em execução: `cd bds-search; _/restart;cd ..`
+3. Clone o projeto `git clone ssh://git@git.lais.huol.ufrn.br:2222/barramento/bds-framework.git`
+4. Entre na página do código `cd bds-framework`
+5. Crie um ambiente virtual usando `mkvirtualenv bds-framework` ou uma das formas que você está aconstumado a usar 
+6. Instale os pacotes `pip install -r requirements` neste ambiente virtual
+7. Crie um branch para a issue de trabalho, no exemplo de ser a issue 4: `git checkout -b issue4`  
+8. Codifique como de costume
+9. Antes de fazer um push para o Gitlab confira a qualidade do código (todos serão gerados e salvos no servidor):
    1. Confira se o código está bem formatado: `flake8`. A meta não haver mensagem alguma
    2. Confira se a tipagem do código está boa: `mypy bds_framework`. A meta não haver mensagem alguma
    3. Confira se todos os testes passam: `python -m pytest`. A meta é cobertura superior a 92% e sucesso nos testes de 100%
-8. Crie um Merge Request para a branch `main` e atribua a `kelson.medeiros`
+10. Crie um Merge Request para a branch `main` e atribua a `kelson.medeiros`
 
 ## Dicas
 
 1. Para saber se a documentação pydocs `pdoc --html -o artifacts/pydocs --config show_source_code=False --force bds/`
 2. Ao subir o código a documentação está pública em .
-
+3. A versão pública da documentação fica disponível em http://barramento.pages.lais.huol.ufrn.br/bds-framework/pydocs/
 
 ## Tipo de commits
 
