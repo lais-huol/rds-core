@@ -83,7 +83,7 @@ instância de desenvolvimento do OpenSearch, do OpenSearch Dashboards e do Redis
 
 1. Para saber se a documentação pydocs `pdoc --html -o artifacts/pydocs --config show_source_code=False --force bds/`
 2. Ao subir o código a documentação está pública em .
-3. A versão pública da documentação fica disponível em http://barramento.pages.lais.huol.ufrn.br/bds-framework/pydocs/
+3. A versão pública da documentação fica disponível em http://barramento.pages.lais.huol.ufrn.br/bds-framework/
 
 ## Tipo de commits
 
