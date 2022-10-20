@@ -76,7 +76,8 @@ pages:
   stage: pages
   image: python:3.10
   script:
-    - pdoc --html -o artifacts/pydocs --config show_source_code=False --force bds/
+    - pip install -r requirements.txt
+    - pdoc3 --html -o artifacts/pydocs --config show_source_code=False --force bds/
   artifacts:
     paths:
       - public
