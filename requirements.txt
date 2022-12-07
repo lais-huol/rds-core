@@ -5,6 +5,9 @@ opensearch_dsl==2.0.1
 elasticsearch==7.17.6
 elasticsearch_dsl==7.4.0
 
+# LAIS public Python libraries
+dbc-reader>=0.1.0
+
 # DEV
 mypy
 lxml

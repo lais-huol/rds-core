@@ -23,6 +23,9 @@ requirements = [
 
     # HTTP clients
     'requests==2.28.1',
+    
+    # LAIS public Python libraries
+    'dbc-reader>=0.1.0',
 
     # Search engine
     'opensearch_py==2.0.0',
@@ -66,7 +69,7 @@ setup(
         'Topic :: Software Development :: Libraries :: Python Modules',
     ],
 
-    python_requires='>=3.8',
+    python_requires='>=3.7',
     install_requires=requirements,
     packages=[
         'bds_framework',
