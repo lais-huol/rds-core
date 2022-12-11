@@ -25,7 +25,7 @@ requirements = [
     'requests==2.28.1',
     
     # LAIS public Python libraries
-    'dbc-reader>=0.1.0',
+    'dbc-reader>=0.1.1',
 
     # Search engine
     'opensearch_py==2.0.0',
