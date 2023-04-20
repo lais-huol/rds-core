@@ -23,17 +23,14 @@ jobs:
         run: echo $RELEASE_VERSION
 
       - name: Set up Python 3.10
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@v3
         with:
-          python-version: 3.10
+          python-version: 3.11.3
 
-      - name: Install dependencies
-        run: pip install flake8 coverage twine
-
-      # - name: lint
-      #   run: |
-      #      pip install pip install flake8 flake8-csv \
-      #      && flake8 --statistics --benchmark --doctests --format=csv_categories --tee --output-file artifacts/flake8.csv
+      - name: Lint
+        run: |
+           pip install pip install flake8 flake8-csv \
+           && flake8 --statistics --benchmark --doctests --format=csv_categories --tee --output-file artifacts/flake8.csv
 
       # - name: static-type-check
       #   run: |
