@@ -49,7 +49,7 @@ with open("requirements.txt", "w") as file1:
 
 setup(
     name='rds-framework',
-    version='0.0.8',
+    version='0.0.9',
     description='Framework para serviços do Rede de Dados em Saúde do LAIS',
     author='Kelson da Costa Medeiros',
     author_email='kelson.medeiros@lais.huol.ufrn.br',

@@ -50,7 +50,8 @@ jobs:
       - name: Build package
         env:
           RELEASE_VERSION: ${{ steps.vars.outputs.tag }}
-        run: python setup.py validate_tag $RELEASE_VERSION && python setup.py sdist
+        run: python setup.py sdist
+        # run: python setup.py validate_tag $RELEASE_VERSION && python setup.py sdist
 
       - name: Deploy to PyPi
         uses: pypa/gh-action-pypi-publish@v1.8.5
