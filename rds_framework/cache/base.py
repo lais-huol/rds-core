@@ -14,13 +14,13 @@ class BaseCache:
     def __init__(self, **params: Dict[str, Any]) -> None:
         self.default_ttl = int(str(params.get("ttl", DEFAULT_TTL)))
 
-    def get_ttl(self, ttl: int = None) -> int:
+    def get_ttl(self, ttl: Union[int, None] = None) -> int:
         return ttl if (isinstance(ttl, int) and ttl >= 0) or (ttl is not None) else self.default_ttl
 
     def key_exists(self, key: str) -> bool:
         return self.get(key, MISSING_KEY) is not MISSING_KEY
 
-    def add(self, key: str, value: Any, ttl: int = None) -> bool:
+    def add(self, key: str, value: Any, ttl: Union[int, None] = None) -> bool:
         """ Define um valor no cache caso a chave ainda não exista.
 
             Caso já exista, não define o valor no cache, preservando o TTL.
