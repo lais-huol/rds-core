@@ -22,10 +22,10 @@ jobs:
           RELEASE_VERSION: ${{ steps.vars.outputs.tag }}
         run: echo $RELEASE_VERSION
 
-      - name: Set up Python 3.10
+      - name: Set up Python 3.7.16
         uses: actions/setup-python@v3
         with:
-          python-version: 3.11.3
+          python-version: 3.7.16
 
       - name: Lint
         run: |
