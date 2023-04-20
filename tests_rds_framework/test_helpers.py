@@ -1,8 +1,8 @@
 import unittest
 import pytest
-from bds_framework.helpers import get_class, instantiate_class, get_variable_by_pathname
-from bds_framework.helpers.cnes import is_cpf_or_cns
-from bds_framework.helpers.http_client import HTTPException, get, get_json
+from rds_framework.helpers import get_class, instantiate_class, get_variable_by_pathname
+from rds_framework.helpers.cnes import is_cpf_or_cns
+from rds_framework.helpers.http_client import HTTPException, get, get_json
 
 TEST_DEFAULT_HEADERS = {
     'Accept': 'application/json, text/plain, */*',

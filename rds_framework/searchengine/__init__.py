@@ -7,8 +7,8 @@ from typing import Dict, Union, Any, List
 import opensearchpy
 import elasticsearch
 from dynaconf.utils.boxing import DynaBox
-from bds_framework.config import settings
-from bds_framework.helpers import instantiate_class
+from rds_framework.config import settings
+from rds_framework.helpers import instantiate_class
 
 
 __search_engine_cache: Dict[str, Any] = {}

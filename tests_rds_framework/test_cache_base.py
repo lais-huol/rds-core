@@ -1,6 +1,6 @@
 import unittest
 import pytest
-from bds_framework.cache.base import BaseCache
+from rds_framework.cache.base import BaseCache
 
 
 class TestBaseCase(unittest.TestCase):

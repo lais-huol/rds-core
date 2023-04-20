@@ -48,15 +48,14 @@ with open("requirements.txt", "w") as file1:
     file1.write("pdoc3")
 
 setup(
-    name='bds-framework',
+    name='rds-framework',
     version='0.1.0',
-    description='Framework para serviços do Barramento de Dados em Saúde do LAIS',
+    description='Framework para serviços do Rede de Dados em Saúde do LAIS',
     author='Kelson da Costa Medeiros',
     author_email='kelson.medeiros@lais.huol.ufrn.br',
-    keywords=['bds', 'framework', 'cache', 'config', 'helper', 'searchengine'],
+    keywords=['rds', 'framework', 'cache', 'config', 'helper', 'searchengine'],
     classifiers=[
         'Development Status :: 5 - Production/Stable',
-        'Framework :: BDS',
         'Intended Audience :: Developers',
         # 'License :: OSI Approved :: MIT License',
         'Operating System :: OS Independent',
@@ -72,12 +71,12 @@ setup(
     python_requires='>=3.7',
     install_requires=requirements,
     packages=[
-        'bds_framework',
-        'bds_framework.cache',
-        'bds_framework.config',
-        'bds_framework.helpers',
-        'bds_framework.searchengine',
+        'rds_framework',
+        'rds_framework.cache',
+        'rds_framework.config',
+        'rds_framework.helpers',
+        'rds_framework.searchengine',
     ],
-    package_dir={'bds_framework': 'bds_framework'},
-    package_data=package_data_dirs('bds_framework', [])
+    package_dir={'rds_framework': 'rds_framework'},
+    package_data=package_data_dirs('rds_framework', [])
 )

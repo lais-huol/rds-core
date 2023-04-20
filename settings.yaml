@@ -25,9 +25,9 @@ SEARCH_ENGINES:
 
 CACHES:
   default:
-    BACKEND: 'bds_framework.cache.nocache.NoCache'
+    BACKEND: 'rds_framework.cache.nocache.NoCache'
   search_engine:
-    BACKEND: 'bds_framework.cache.search_engine.SearchEngineCache'
+    BACKEND: 'rds_framework.cache.search_engine.SearchEngineCache'
     OPTIONS:
       ttl: 60
       search_engine_alias: 'default'

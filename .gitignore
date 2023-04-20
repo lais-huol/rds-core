@@ -39,7 +39,7 @@ MANIFEST
 pip-log.txt
 pip-delete-this-directory.txt
 
-# Unit tests_bds_framework / coverage reports
+# Unit tests_rds_framework / coverage reports
 htmlcov/
 .tox/
 .coverage

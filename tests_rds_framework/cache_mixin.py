@@ -1,11 +1,11 @@
 import datetime
-from bds_framework.cache import caches
+from rds_framework.cache import caches
 
 
 class CacheMixin:
 
     def __init__(self, method_name: str = 'runTest') -> None:
-        from bds_framework.cache.nocache import NoCache
+        from rds_framework.cache.nocache import NoCache
         self.cache = NoCache()
         self.cache_name = 'default'
         super().__init__(method_name)

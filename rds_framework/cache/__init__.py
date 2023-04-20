@@ -3,8 +3,8 @@ Documentar.
 """
 
 import dynaconf
-from bds_framework.config import settings
-from bds_framework.helpers import instantiate_class
+from rds_framework.config import settings
+from rds_framework.helpers import instantiate_class
 
 
 caches = {}
@@ -12,6 +12,6 @@ caches = {}
 if 'CACHES' in settings and isinstance(settings.CACHES, dynaconf.utils.boxing.DynaBox):
     for cache_name, cache_configs in settings.CACHES.items():
         caches[cache_name] = instantiate_class(cache_configs['BACKEND'], **cache_configs.get('OPTIONS', {}))
-    default_cache = caches.get('default', instantiate_class('bds_framework.cache.nocache.NoCache'))
+    default_cache = caches.get('default', instantiate_class('rds_framework.cache.nocache.NoCache'))
 else:
-    default_cache = instantiate_class('bds_framework.cache.nocache.NoCache')
+    default_cache = instantiate_class('rds_framework.cache.nocache.NoCache')

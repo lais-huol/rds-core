@@ -1,8 +1,8 @@
 import unittest
 import pytest
-from bds_framework.cache import caches
-from bds_framework.searchengine import create_index_if_not_exists, delete_index_if_exists
-from tests_bds_framework.cache_mixin import CacheMixin
+from rds_framework.cache import caches
+from rds_framework.searchengine import create_index_if_not_exists, delete_index_if_exists
+from tests_rds_framework.cache_mixin import CacheMixin
 
 
 class TestSearchEngineCache(CacheMixin, unittest.TestCase):

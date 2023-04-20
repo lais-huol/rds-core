@@ -6,7 +6,7 @@ from typing import Dict, List, Any, Optional, Union
 import json
 from http.client import HTTPException as OriginalHTTPException
 import requests
-from bds_framework.config import settings
+from rds_framework.config import settings
 
 DEFAULT_HEADERS: Dict[str, Any] = settings.get('DEFAULT_HEADERS', {})
 
