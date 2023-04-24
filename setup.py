@@ -36,15 +36,6 @@ requirements = [
 with open("requirements.txt", "w") as file1:
     for requirement in requirements:
         file1.write(f"{requirement}\n")
-    # file1.write("\n# DEV\n")
-    # file1.write("mypy\n")
-    # file1.write("lxml\n")
-    # file1.write("flake8\n")
-    # file1.write("types-requests\n")
-    # file1.write("pytest>=7.1.3\n")
-    # file1.write("pytest-cov>=4.0.0\n")
-    # file1.write("pytest-profiling>=1.7.0\n")
-    # file1.write("pdoc3\n")
 
 setup(
     name="rds-core",
