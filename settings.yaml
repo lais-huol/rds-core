@@ -1,22 +1,22 @@
 DEBUG: true
 
-ENVIRONMENT: 'example'
+ENVIRONMENT: "example"
 
 DEFAULT_HEADERS:
-  Accept: 'application/json, text/plain, */*'
-  Accept-Encoding: 'gzip, deflate, br'
-  Accept-Language: 'pt-BR,pt;q=0.9,en-US;q=0.8,en;q=0.7'
-  Connection: 'keep-alive'
-  Host: 'cnes.datasus.gov.br'
-  Referer: 'https://cnes.datasus.gov.br/pages/estabelecimentos/consulta.jsp'
+  Accept: "application/json, text/plain, */*"
+  Accept-Encoding: "gzip, deflate, br"
+  Accept-Language: "pt-BR,pt;q=0.9,en-US;q=0.8,en;q=0.7"
+  Connection: "keep-alive"
+  Host: "cnes.datasus.gov.br"
+  Referer: "https://cnes.datasus.gov.br/pages/estabelecimentos/consulta.jsp"
 
 SEARCH_ENGINES:
   default:
-    engine: 'opensearchpy.OpenSearch'
-    dsl_engine: 'opensearch_dsl.connections'
-    hosts: 'https://localhost:9200'
-    username: 'admin'
-    password: 'admin'
+    engine: "opensearchpy.OpenSearch"
+    dsl_engine: "opensearch_dsl.connections"
+    hosts: "https://localhost:9200"
+    username: "admin"
+    password: "admin"
     ssl_show_warn: false
     verify_certs: false
     ttl: 5
@@ -25,11 +25,11 @@ SEARCH_ENGINES:
 
 CACHES:
   default:
-    BACKEND: 'rds_framework.cache.nocache.NoCache'
+    BACKEND: "rds_core.cache.nocache.NoCache"
   search_engine:
-    BACKEND: 'rds_framework.cache.search_engine.SearchEngineCache'
+    BACKEND: "rds_core.cache.search_engine.SearchEngineCache"
     OPTIONS:
       ttl: 60
-      search_engine_alias: 'default'
-      index_name: 'test_index_cache'
-      refresh: 'wait_for'
+      search_engine_alias: "default"
+      index_name: "test_index_cache"
+      refresh: "wait_for"

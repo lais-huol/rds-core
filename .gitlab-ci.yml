@@ -5,7 +5,6 @@ stages:
   - deploy
   - pages
 
-
 lint:
   stage: quality
   image: python:3.10
@@ -18,19 +17,17 @@ lint:
     expire_in: 30 days
   allow_failure: true
 
-
 # sast:
 #   stage: quality
 # include:
 #   - template: Security/SAST.gitlab-ci.yml
-
 
 static-type-check:
   stage: quality
   image: python:3.10
   script:
     - pip install mypy lxml
-    - mypy --warn-unused-configs --python-version 3.10 --show-error-context --show-column-numbers --show-error-end --show-error-codes --pretty --html-report artifacts/statictypecheck --cobertura-xml-report statictypecheck rds_framework
+    - mypy --warn-unused-configs --python-version 3.10 --show-error-context --show-column-numbers --show-error-end --show-error-codes --pretty --html-report artifacts/statictypecheck --cobertura-xml-report statictypecheck rds_core
     # --disallow-untyped-calls --disallow-untyped-defs
   artifacts:
     paths:
@@ -41,7 +38,6 @@ static-type-check:
         path: coverage/cobertura-coverage.xml
     expire_in: 30 days
   allow_failure: true
-
 
 unit-test:
   stage: test
@@ -60,7 +56,6 @@ unit-test:
     expire_in: 180 days
   allow_failure: true
 
-
 python-deploy:
   image: registry.lais.huol.ufrn.br/sistemas-internos/python_package_deploy:1-0-5
   stage: deploy
@@ -71,21 +66,18 @@ python-deploy:
   only:
     - tags
 
-
 pages:
   stage: pages
   image: python:3.10
   script:
     - pip install -r requirements.txt
-    - pdoc3 --html -o public/pydocs --config show_source_code=False --force rds_framework/
+    - pdoc3 --html -o public/pydocs --config show_source_code=False --force rds_core/
   artifacts:
     paths:
       - public
   rules:
     - if: $CI_COMMIT_REF_NAME == $CI_DEFAULT_BRANCH
   allow_failure: true
-
-
 # SAST customization: https://docs.gitlab.com/ee/user/application_security/sast/#customizing-the-sast-settings
 # Secret Detection customization: https://docs.gitlab.com/ee/user/application_security/secret_detection/#customizing-settings
 # Dependency Scanning customization: https://docs.gitlab.com/ee/user/application_security/dependency_scanning/#customizing-the-dependency-scanning-settings

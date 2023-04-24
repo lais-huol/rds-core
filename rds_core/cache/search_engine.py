@@ -2,12 +2,12 @@
 Documentar.
 """
 
-from typing import Any, List, Dict
+from typing import Any, List, Dict, Union
 
 import opensearchpy
 import elasticsearch
-from rds_framework.cache.base import BaseCache
-from rds_framework.searchengine import search_engine as search_engine_func
+from rds_core.cache.base import BaseCache
+from rds_core.searchengine import search_engine as search_engine_func
 
 
 class SearchEngineCache(BaseCache):
@@ -25,7 +25,7 @@ class SearchEngineCache(BaseCache):
     def key_exists(self, key: str) -> bool:
         return self.search_engine.exists(self.index_name, id=key)
 
-    def add(self, key: str, value: Any, ttl: int = None) -> bool:
+    def add(self, key: str, value: Any, ttl: Union[int, None] = None) -> bool:
         """ Define um valor no cache caso a chave ainda não exista.
 
             Caso já exista, não define o valor no cache, preservando o TTL.
@@ -58,13 +58,13 @@ class SearchEngineCache(BaseCache):
         except elasticsearch.exceptions.NotFoundError:
             return default
 
-    def set(self, key: str, value: Any, ttl: int = None) -> None:
+    def set(self, key: str, value: Any, ttl: Union[int, None] = None) -> None:
         if type(value) == bytes:
             raise ValueError("Não suporta salvar bytes")
         body = {'value': value, 'ttl': self.get_ttl(ttl)}
         self.search_engine.index(self.index_name, body=body, id=key, refresh=self.refresh)
 
-    def touch(self, key: str, ttl: int = None) -> bool:
+    def touch(self, key: str, ttl: Union[int, None] = None) -> bool:
         if self.key_exists(key):
             self.search_engine.index(self.index_name, body={'ttl': self.get_ttl(ttl)}, id=key, refresh=self.refresh)
             return True

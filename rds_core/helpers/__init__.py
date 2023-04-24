@@ -11,7 +11,7 @@ def get_class(full_class_name: str) -> Any:
     return getattr(importlib.import_module(module_name), class_name)
 
 
-def instantiate_class(full_class_name: str, *args: List, **kwargs: Dict[str, Any]) -> object:
+def instantiate_class(full_class_name: str, *args: List, **kwargs: Dict[str, Any]) -> Any:
     Klass = get_class(full_class_name)
     return Klass(*args, **kwargs)
 
