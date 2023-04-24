@@ -3,7 +3,7 @@ Documentar.
 """
 
 from typing import Any, List, Dict, Union
-from rds_framework.cache.base import BaseCache
+from rds_core.cache.base import BaseCache
 
 
 class NoCache(BaseCache):

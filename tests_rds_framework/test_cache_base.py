@@ -1,6 +1,6 @@
 import unittest
 import pytest
-from rds_framework.cache.base import BaseCache
+from rds_core.cache.base import BaseCache
 
 
 class TestBaseCase(unittest.TestCase):

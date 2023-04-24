@@ -1,6 +1,6 @@
 import datetime
 import unittest
-from rds_framework.cache import caches
+from rds_core.cache import caches
 
 
 class NoCacheTests(unittest.TestCase):

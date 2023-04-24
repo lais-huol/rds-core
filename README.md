@@ -1,4 +1,4 @@
-# rds-framework
+# rds-core
 
 É uma biblioteca pública em Python que condensa um conjunto de boas práticas para o desenvolvimento das aplicações 
 que compõem a **Rede da Dados em Saúde (RDS) RDS**  do **Laboratório de Inovação Tecnológica em Saúde (LAIS)** 
@@ -8,18 +8,18 @@ RDS-RN e RDS-ES.
 ## Usando no seu projeto 
 
 ```
-pip install rds-framework
+pip install rds-core
 ```
 
 ## Como desenvolver o projeto
 
 ```bash
-docker build -t rds-framework .
+docker build -t rds-core .
 ```
 
 ## Dicas
 
-1. A versão pública da documentação fica disponível em http://rds.pages.lais.huol.ufrn.br/rds-framework/
+1. A versão pública da documentação fica disponível em http://rds.pages.lais.huol.ufrn.br/rds-core/
 
 ## Tipo de commits
 

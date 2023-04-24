@@ -47,7 +47,7 @@ with open("requirements.txt", "w") as file1:
     # file1.write("pdoc3\n")
 
 setup(
-    name="rds-framework",
+    name="rds-core",
     version="0.0.10",
     description="Framework para serviços do Rede de Dados em Saúde do LAIS",
     author="Kelson da Costa Medeiros",
@@ -69,12 +69,12 @@ setup(
     python_requires=">=3.7",
     install_requires=requirements,
     packages=[
-        "rds_framework",
-        "rds_framework.cache",
-        "rds_framework.config",
-        "rds_framework.helpers",
-        "rds_framework.searchengine",
+        "rds_core",
+        "rds_core.cache",
+        "rds_core.config",
+        "rds_core.helpers",
+        "rds_core.searchengine",
     ],
-    package_dir={"rds_framework": "rds_framework"},
-    package_data=package_data_dirs("rds_framework", []),
+    package_dir={"rds_core": "rds_core"},
+    package_data=package_data_dirs("rds_core", []),
 )

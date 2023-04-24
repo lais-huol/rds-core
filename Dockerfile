@@ -12,7 +12,7 @@ RUN pip install --upgrade pip \
 WORKDIR /app
 
 # # Static type check
-# RUN mypy --warn-unused-configs --python-version 3.10 --show-error-context --show-column-numbers --show-error-end --show-error-codes --pretty --html-report artifacts/statictypecheck --cobertura-xml-report statictypecheck rds_framework
+# RUN mypy --warn-unused-configs --python-version 3.10 --show-error-context --show-column-numbers --show-error-end --show-error-codes --pretty --html-report artifacts/statictypecheck --cobertura-xml-report statictypecheck rds_core
 
 # # Static type check
 # RUN python -m pytest

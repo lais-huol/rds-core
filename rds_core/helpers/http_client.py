@@ -7,7 +7,7 @@ import json
 from http.client import HTTPException as OriginalHTTPException
 import requests
 from requests.structures import CaseInsensitiveDict
-from rds_framework.config import settings
+from rds_core.config import settings
 
 DEFAULT_HEADERS: Dict[str, Any] = settings.get('DEFAULT_HEADERS', {})
 

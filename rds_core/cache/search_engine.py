@@ -6,8 +6,8 @@ from typing import Any, List, Dict, Union
 
 import opensearchpy
 import elasticsearch
-from rds_framework.cache.base import BaseCache
-from rds_framework.searchengine import search_engine as search_engine_func
+from rds_core.cache.base import BaseCache
+from rds_core.searchengine import search_engine as search_engine_func
 
 
 class SearchEngineCache(BaseCache):

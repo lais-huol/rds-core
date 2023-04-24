@@ -5,7 +5,7 @@ import dynaconf
 import opensearchpy
 import pytest
 
-from rds_framework.searchengine import (
+from rds_core.searchengine import (
     create_index_if_not_exists, delete_index_if_exists,
     get_search_engine_config, search_engine, search_engine_healthy,
     index, query, search,
