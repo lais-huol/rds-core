@@ -26,12 +26,14 @@ jobs:
         with:
           python-version: 3.7.16
 
+      - name: Configure artifacts directory
+        run: mkdir artifacts
+
       - name: Lint
         run: |
           pip install pip install flake8 flake8-csv \
-          && flake8 --statistics --benchmark --doctests --format=csv_categories --tee --output-file artifacts/flake8.csv \
-          && cat artifacts/flake8.csv
-      # TODO: estudar como salvar os artefatos
+          && flake8 --statistics --benchmark --doctests --format=csv_categories --tee --output-file artifacts/flake8.csv
+
       # TODO: colocar de volta depois
       # - name: static-type-check
       #   run: |
@@ -43,6 +45,14 @@ jobs:
       #   run: |
       #      pip install -r requirements.txt \
       #      && python -m pytest
+
+      - name: Archive QA artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: all-artifacts
+          path: |
+            artifacts
+
       - name: Build package
         env:
           RELEASE_VERSION: ${{ steps.vars.outputs.tag }}
