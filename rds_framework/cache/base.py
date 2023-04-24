@@ -48,12 +48,12 @@ class BaseCache:
         """
         raise NotImplementedError("subclasses of BaseCache must provide a get() method")
 
-    def set(self, key: str, value: Any, ttl: int = None) -> None:
+    def set(self, key: str, value: Any, ttl: Union[int, None] = None) -> None:
         """ Set a value in the cache. If ttl is given, use that ttl for the key; otherwise use the default cache ttl.
         """
         raise NotImplementedError("subclasses of BaseCache must provide a set() method")
 
-    def get_or_set(self, key: str, default: Any, ttl: int = None) -> Any:
+    def get_or_set(self, key: str, default: Any, ttl: Union[int, None] = None) -> Any:
         """ Fetch a given key from the cache. If the key does not exist,
             set the key and set it to the default value. The default value can
             also be any callable. If ttl is given, use that ttl for the
@@ -72,7 +72,7 @@ class BaseCache:
         """
         raise NotImplementedError("subclasses of BaseCache must provide a delete() method")
 
-    def touch(self, key: str, ttl: int = None) -> bool:
+    def touch(self, key: str, ttl: Union[int, None] = None) -> bool:
         """
             Update the key's expiry time using ttl. Return True if successful or False if the key does not exist.
         """
@@ -92,7 +92,7 @@ class BaseCache:
                 d[k] = val
         return d
 
-    def set_many(self, data: Any, ttl: int = None) -> None:
+    def set_many(self, data: Any, ttl: Union[int, None] = None) -> None:
         """ Set a bunch of values in the cache at once from a dict of key/value
             pairs.  For certain backends (memcached), this is much more efficient
             than calling set() multiple times.

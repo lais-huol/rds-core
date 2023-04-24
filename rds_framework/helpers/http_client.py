@@ -2,19 +2,24 @@
 Documentar.
 """
 
-from typing import Dict, List, Any, Optional, Union
+from typing import Dict, List, Any, Union
 import json
 from http.client import HTTPException as OriginalHTTPException
 import requests
+from requests.structures import CaseInsensitiveDict
 from rds_framework.config import settings
 
 DEFAULT_HEADERS: Dict[str, Any] = settings.get('DEFAULT_HEADERS', {})
 
 
 class HTTPException(OriginalHTTPException):
-    def __init__(self, message: str, url: str, status_code: str = None, reason: str = None,
-                 request_headers: Optional[Dict[Any, Any]] = None,
-                 response_headers: Optional[Dict[Any, Any]] = None) -> None:
+    def __init__(self,
+                 message: str,
+                 url: str,
+                 status_code: Union[str, None] = None,
+                 reason: Union[str, None] = None,
+                 request_headers: Union[Dict[Any, Any], None] = None,
+                 response_headers: Union[CaseInsensitiveDict, None] = None) -> None:
         super().__init__(message)
         self.url = url
         self.status_code = status_code

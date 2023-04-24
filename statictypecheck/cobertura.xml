@@ -1,0 +1,328 @@
+<coverage timestamp="1682098884" version="1.2.0" line-rate="0.6508" branch-rate="0">
+  <sources>
+    <source>/app</source>
+  </sources>
+  <packages>
+    <package complexity="1.0" name="rds_framework" branch-rate="0" line-rate="1.0">
+      <classes>
+        <class complexity="1.0" filename="rds_framework/__init__.py" name="__init__.py" branch-rate="0" line-rate="1.0">
+          <methods/>
+          <lines/>
+        </class>
+      </classes>
+    </package>
+    <package complexity="1.0" name="rds_framework.cache" branch-rate="0" line-rate="0.5968">
+      <classes>
+        <class complexity="1.0" filename="rds_framework/cache/__init__.py" name="__init__.py" branch-rate="0" line-rate="0.3333">
+          <methods/>
+          <lines>
+            <line branch="false" hits="0" number="5" precision="any"/>
+            <line branch="false" hits="1" number="6" precision="precise"/>
+            <line branch="false" hits="1" number="7" precision="precise"/>
+            <line branch="false" hits="1" number="10" precision="precise"/>
+            <line branch="false" hits="0" number="12" precision="any"/>
+            <line branch="false" hits="0" number="13" precision="any"/>
+            <line branch="false" hits="0" number="14" precision="any"/>
+            <line branch="false" hits="0" number="15" precision="any"/>
+            <line branch="false" hits="0" number="17" precision="any"/>
+          </lines>
+        </class>
+        <class complexity="1.0" filename="rds_framework/cache/base.py" name="base.py" branch-rate="0" line-rate="0.5962">
+          <methods/>
+          <lines>
+            <line branch="false" hits="1" number="5" precision="precise"/>
+            <line branch="false" hits="1" number="8" precision="precise"/>
+            <line branch="false" hits="1" number="9" precision="precise"/>
+            <line branch="false" hits="1" number="12" precision="precise"/>
+            <line branch="true" hits="1" number="14" precision="imprecise" condition-coverage="50% (1/2)"/>
+            <line branch="true" hits="1" number="15" precision="imprecise" condition-coverage="50% (1/2)"/>
+            <line branch="false" hits="1" number="17" precision="precise"/>
+            <line branch="false" hits="1" number="18" precision="precise"/>
+            <line branch="false" hits="1" number="20" precision="precise"/>
+            <line branch="false" hits="0" number="21" precision="any"/>
+            <line branch="false" hits="0" number="23" precision="any"/>
+            <line branch="false" hits="1" number="39" precision="precise"/>
+            <line branch="false" hits="0" number="41" precision="any"/>
+            <line branch="false" hits="1" number="49" precision="precise"/>
+            <line branch="false" hits="0" number="51" precision="any"/>
+            <line branch="false" hits="1" number="54" precision="precise"/>
+            <line branch="false" hits="0" number="56" precision="any"/>
+            <line branch="false" hits="0" number="64" precision="any"/>
+            <line branch="false" hits="0" number="65" precision="any"/>
+            <line branch="false" hits="0" number="66" precision="any"/>
+            <line branch="false" hits="0" number="67" precision="any"/>
+            <line branch="false" hits="0" number="68" precision="any"/>
+            <line branch="false" hits="1" number="70" precision="precise"/>
+            <line branch="false" hits="1" number="73" precision="precise"/>
+            <line branch="false" hits="1" number="75" precision="precise"/>
+            <line branch="false" hits="1" number="79" precision="precise"/>
+            <line branch="true" hits="1" number="81" precision="imprecise" condition-coverage="50% (1/2)"/>
+            <line branch="false" hits="1" number="88" precision="precise"/>
+            <line branch="false" hits="1" number="89" precision="precise"/>
+            <line branch="false" hits="0" number="90" precision="any"/>
+            <line branch="false" hits="0" number="91" precision="any"/>
+            <line branch="false" hits="0" number="92" precision="any"/>
+            <line branch="true" hits="1" number="93" precision="imprecise" condition-coverage="50% (1/2)"/>
+            <line branch="false" hits="0" number="95" precision="any"/>
+            <line branch="false" hits="0" number="103" precision="any"/>
+            <line branch="false" hits="0" number="104" precision="any"/>
+            <line branch="false" hits="1" number="106" precision="precise"/>
+            <line branch="false" hits="1" number="110" precision="precise"/>
+            <line branch="false" hits="1" number="111" precision="precise"/>
+            <line branch="false" hits="1" number="113" precision="precise"/>
+            <line branch="false" hits="0" number="117" precision="any"/>
+            <line branch="false" hits="0" number="118" precision="any"/>
+            <line branch="false" hits="1" number="119" precision="precise"/>
+            <line branch="false" hits="0" number="120" precision="any"/>
+            <line branch="false" hits="0" number="121" precision="any"/>
+            <line branch="false" hits="0" number="122" precision="any"/>
+            <line branch="false" hits="1" number="124" precision="precise"/>
+            <line branch="false" hits="1" number="128" precision="precise"/>
+            <line branch="false" hits="1" number="130" precision="precise"/>
+            <line branch="false" hits="1" number="132" precision="precise"/>
+            <line branch="true" hits="1" number="134" precision="imprecise" condition-coverage="50% (1/2)"/>
+            <line branch="false" hits="1" number="136" precision="precise"/>
+          </lines>
+        </class>
+        <class complexity="1.0" filename="rds_framework/cache/nocache.py" name="nocache.py" branch-rate="0" line-rate="0.6923">
+          <methods/>
+          <lines>
+            <line branch="false" hits="1" number="5" precision="precise"/>
+            <line branch="false" hits="1" number="6" precision="precise"/>
+            <line branch="false" hits="1" number="9" precision="precise"/>
+            <line branch="true" hits="1" number="10" precision="imprecise" condition-coverage="50% (1/2)"/>
+            <line branch="true" hits="1" number="11" precision="imprecise" condition-coverage="50% (1/2)"/>
+            <line branch="false" hits="0" number="13" precision="any"/>
+            <line branch="false" hits="1" number="14" precision="precise"/>
+            <line branch="false" hits="0" number="16" precision="any"/>
+            <line branch="false" hits="0" number="17" precision="any"/>
+            <line branch="false" hits="0" number="19" precision="any"/>
+            <line branch="false" hits="1" number="20" precision="precise"/>
+            <line branch="false" hits="1" number="22" precision="precise"/>
+            <line branch="false" hits="1" number="25" precision="precise"/>
+          </lines>
+        </class>
+        <class complexity="1.0" filename="rds_framework/cache/search_engine.py" name="search_engine.py" branch-rate="0" line-rate="0.6200">
+          <methods/>
+          <lines>
+            <line branch="false" hits="1" number="5" precision="precise"/>
+            <line branch="false" hits="1" number="7" precision="precise"/>
+            <line branch="false" hits="1" number="8" precision="precise"/>
+            <line branch="false" hits="1" number="9" precision="precise"/>
+            <line branch="false" hits="1" number="10" precision="precise"/>
+            <line branch="false" hits="1" number="13" precision="precise"/>
+            <line branch="true" hits="1" number="15" precision="imprecise" condition-coverage="50% (1/2)"/>
+            <line branch="true" hits="1" number="16" precision="imprecise" condition-coverage="50% (1/2)"/>
+            <line branch="true" hits="1" number="17" precision="imprecise" condition-coverage="50% (1/2)"/>
+            <line branch="true" hits="1" number="18" precision="imprecise" condition-coverage="50% (1/2)"/>
+            <line branch="true" hits="1" number="19" precision="imprecise" condition-coverage="50% (1/2)"/>
+            <line branch="false" hits="0" number="22" precision="any"/>
+            <line branch="false" hits="1" number="23" precision="precise"/>
+            <line branch="false" hits="1" number="25" precision="precise"/>
+            <line branch="false" hits="0" number="26" precision="any"/>
+            <line branch="false" hits="0" number="28" precision="any"/>
+            <line branch="false" hits="1" number="44" precision="precise"/>
+            <line branch="false" hits="1" number="45" precision="precise"/>
+            <line branch="false" hits="0" number="46" precision="any"/>
+            <line branch="false" hits="0" number="47" precision="any"/>
+            <line branch="false" hits="1" number="48" precision="precise"/>
+            <line branch="false" hits="0" number="50" precision="any"/>
+            <line branch="false" hits="0" number="52" precision="any"/>
+            <line branch="false" hits="0" number="53" precision="any"/>
+            <line branch="false" hits="0" number="55" precision="any"/>
+            <line branch="false" hits="1" number="56" precision="precise"/>
+            <line branch="false" hits="0" number="57" precision="any"/>
+            <line branch="false" hits="1" number="58" precision="precise"/>
+            <line branch="false" hits="0" number="59" precision="any"/>
+            <line branch="false" hits="0" number="61" precision="any"/>
+            <line branch="false" hits="0" number="62" precision="any"/>
+            <line branch="false" hits="1" number="63" precision="precise"/>
+            <line branch="false" hits="0" number="64" precision="any"/>
+            <line branch="false" hits="0" number="65" precision="any"/>
+            <line branch="false" hits="1" number="67" precision="precise"/>
+            <line branch="false" hits="1" number="68" precision="precise"/>
+            <line branch="false" hits="0" number="69" precision="any"/>
+            <line branch="false" hits="1" number="70" precision="precise"/>
+            <line branch="false" hits="1" number="71" precision="precise"/>
+            <line branch="false" hits="1" number="73" precision="precise"/>
+            <line branch="false" hits="0" number="75" precision="any"/>
+            <line branch="false" hits="1" number="76" precision="precise"/>
+            <line branch="false" hits="1" number="77" precision="precise"/>
+            <line branch="false" hits="1" number="78" precision="precise"/>
+            <line branch="false" hits="1" number="79" precision="precise"/>
+            <line branch="false" hits="1" number="81" precision="precise"/>
+            <line branch="false" hits="1" number="82" precision="precise"/>
+            <line branch="true" hits="1" number="84" precision="imprecise" condition-coverage="50% (1/2)"/>
+            <line branch="false" hits="0" number="91" precision="any"/>
+            <line branch="false" hits="0" number="92" precision="any"/>
+          </lines>
+        </class>
+      </classes>
+    </package>
+    <package complexity="1.0" name="rds_framework.config" branch-rate="0" line-rate="0.3333">
+      <classes>
+        <class complexity="1.0" filename="rds_framework/config/__init__.py" name="__init__.py" branch-rate="0" line-rate="0.3333">
+          <methods/>
+          <lines>
+            <line branch="false" hits="0" number="5" precision="any"/>
+            <line branch="false" hits="0" number="7" precision="any"/>
+            <line branch="false" hits="1" number="8" precision="precise"/>
+          </lines>
+        </class>
+      </classes>
+    </package>
+    <package complexity="1.0" name="rds_framework.helpers" branch-rate="0" line-rate="0.7447">
+      <classes>
+        <class complexity="1.0" filename="rds_framework/helpers/__init__.py" name="__init__.py" branch-rate="0" line-rate="0.3636">
+          <methods/>
+          <lines>
+            <line branch="false" hits="1" number="5" precision="precise"/>
+            <line branch="false" hits="1" number="6" precision="precise"/>
+            <line branch="false" hits="0" number="9" precision="any"/>
+            <line branch="false" hits="1" number="10" precision="precise"/>
+            <line branch="false" hits="0" number="11" precision="any"/>
+            <line branch="false" hits="0" number="14" precision="any"/>
+            <line branch="false" hits="0" number="15" precision="any"/>
+            <line branch="false" hits="0" number="16" precision="any"/>
+            <line branch="false" hits="0" number="19" precision="any"/>
+            <line branch="false" hits="1" number="20" precision="precise"/>
+            <line branch="false" hits="0" number="21" precision="any"/>
+          </lines>
+        </class>
+        <class complexity="1.0" filename="rds_framework/helpers/cnes.py" name="cnes.py" branch-rate="0" line-rate="1.0000">
+          <methods/>
+          <lines>
+            <line branch="false" hits="1" number="6" precision="precise"/>
+            <line branch="false" hits="1" number="7" precision="precise"/>
+            <line branch="false" hits="1" number="8" precision="precise"/>
+            <line branch="false" hits="1" number="9" precision="precise"/>
+            <line branch="false" hits="1" number="10" precision="precise"/>
+            <line branch="false" hits="1" number="12" precision="precise"/>
+          </lines>
+        </class>
+        <class complexity="1.0" filename="rds_framework/helpers/http_client.py" name="http_client.py" branch-rate="0" line-rate="0.8333">
+          <methods/>
+          <lines>
+            <line branch="false" hits="1" number="5" precision="precise"/>
+            <line branch="false" hits="1" number="6" precision="precise"/>
+            <line branch="false" hits="1" number="7" precision="precise"/>
+            <line branch="false" hits="1" number="8" precision="precise"/>
+            <line branch="false" hits="1" number="9" precision="precise"/>
+            <line branch="false" hits="1" number="10" precision="precise"/>
+            <line branch="false" hits="0" number="12" precision="any"/>
+            <line branch="false" hits="1" number="15" precision="precise"/>
+            <line branch="true" hits="1" number="16" precision="imprecise" condition-coverage="50% (1/2)"/>
+            <line branch="false" hits="1" number="19" precision="precise"/>
+            <line branch="false" hits="1" number="20" precision="precise"/>
+            <line branch="false" hits="1" number="21" precision="precise"/>
+            <line branch="false" hits="1" number="22" precision="precise"/>
+            <line branch="false" hits="1" number="23" precision="precise"/>
+            <line branch="false" hits="1" number="24" precision="precise"/>
+            <line branch="false" hits="1" number="25" precision="precise"/>
+            <line branch="false" hits="1" number="26" precision="precise"/>
+            <line branch="true" hits="1" number="27" precision="imprecise" condition-coverage="50% (1/2)"/>
+            <line branch="true" hits="1" number="28" precision="imprecise" condition-coverage="50% (1/2)"/>
+            <line branch="false" hits="0" number="31" precision="any"/>
+            <line branch="true" hits="1" number="33" precision="imprecise" condition-coverage="50% (1/2)"/>
+            <line branch="true" hits="1" number="34" precision="imprecise" condition-coverage="50% (1/2)"/>
+            <line branch="false" hits="1" number="36" precision="precise"/>
+            <line branch="false" hits="1" number="37" precision="precise"/>
+            <line branch="false" hits="1" number="38" precision="precise"/>
+            <line branch="false" hits="1" number="40" precision="precise"/>
+            <line branch="true" hits="1" number="41" precision="imprecise" condition-coverage="50% (1/2)"/>
+            <line branch="false" hits="0" number="44" precision="any"/>
+            <line branch="false" hits="0" number="46" precision="any"/>
+            <line branch="false" hits="0" number="47" precision="any"/>
+          </lines>
+        </class>
+      </classes>
+    </package>
+    <package complexity="1.0" name="rds_framework.searchengine" branch-rate="0" line-rate="0.6923">
+      <classes>
+        <class complexity="1.0" filename="rds_framework/searchengine/__init__.py" name="__init__.py" branch-rate="0" line-rate="0.6923">
+          <methods/>
+          <lines>
+            <line branch="false" hits="1" number="5" precision="precise"/>
+            <line branch="false" hits="1" number="6" precision="precise"/>
+            <line branch="false" hits="1" number="7" precision="precise"/>
+            <line branch="false" hits="1" number="8" precision="precise"/>
+            <line branch="false" hits="0" number="9" precision="any"/>
+            <line branch="false" hits="1" number="10" precision="precise"/>
+            <line branch="false" hits="1" number="11" precision="precise"/>
+            <line branch="true" hits="1" number="14" precision="imprecise" condition-coverage="50% (1/2)"/>
+            <line branch="false" hits="0" number="17" precision="any"/>
+            <line branch="false" hits="0" number="19" precision="any"/>
+            <line branch="false" hits="0" number="20" precision="any"/>
+            <line branch="false" hits="1" number="22" precision="precise"/>
+            <line branch="false" hits="0" number="23" precision="any"/>
+            <line branch="false" hits="1" number="26" precision="precise"/>
+            <line branch="false" hits="1" number="27" precision="precise"/>
+            <line branch="false" hits="1" number="28" precision="precise"/>
+            <line branch="false" hits="1" number="29" precision="precise"/>
+            <line branch="false" hits="0" number="31" precision="any"/>
+            <line branch="false" hits="0" number="33" precision="any"/>
+            <line branch="true" hits="1" number="34" precision="imprecise" condition-coverage="50% (1/2)"/>
+            <line branch="false" hits="0" number="35" precision="any"/>
+            <line branch="false" hits="0" number="36" precision="any"/>
+            <line branch="false" hits="0" number="37" precision="any"/>
+            <line branch="false" hits="0" number="39" precision="any"/>
+            <line branch="false" hits="0" number="40" precision="any"/>
+            <line branch="true" hits="1" number="41" precision="imprecise" condition-coverage="50% (1/2)"/>
+            <line branch="false" hits="0" number="42" precision="any"/>
+            <line branch="false" hits="0" number="43" precision="any"/>
+            <line branch="false" hits="0" number="44" precision="any"/>
+            <line branch="true" hits="1" number="61" precision="imprecise" condition-coverage="50% (1/2)"/>
+            <line branch="false" hits="1" number="63" precision="precise"/>
+            <line branch="false" hits="1" number="64" precision="precise"/>
+            <line branch="false" hits="1" number="65" precision="precise"/>
+            <line branch="false" hits="1" number="66" precision="precise"/>
+            <line branch="true" hits="1" number="83" precision="imprecise" condition-coverage="50% (1/2)"/>
+            <line branch="true" hits="1" number="84" precision="imprecise" condition-coverage="50% (1/2)"/>
+            <line branch="true" hits="1" number="86" precision="imprecise" condition-coverage="50% (1/2)"/>
+            <line branch="false" hits="1" number="87" precision="precise"/>
+            <line branch="false" hits="1" number="88" precision="precise"/>
+            <line branch="false" hits="0" number="89" precision="any"/>
+            <line branch="false" hits="1" number="90" precision="precise"/>
+            <line branch="false" hits="1" number="91" precision="precise"/>
+            <line branch="false" hits="0" number="94" precision="any"/>
+            <line branch="false" hits="1" number="95" precision="precise"/>
+            <line branch="false" hits="1" number="96" precision="precise"/>
+            <line branch="false" hits="1" number="97" precision="precise"/>
+            <line branch="true" hits="1" number="113" precision="imprecise" condition-coverage="50% (1/2)"/>
+            <line branch="false" hits="1" number="114" precision="precise"/>
+            <line branch="false" hits="1" number="115" precision="precise"/>
+            <line branch="false" hits="0" number="116" precision="any"/>
+            <line branch="false" hits="1" number="117" precision="precise"/>
+            <line branch="false" hits="1" number="118" precision="precise"/>
+            <line branch="false" hits="0" number="121" precision="any"/>
+            <line branch="false" hits="1" number="124" precision="precise"/>
+            <line branch="false" hits="1" number="125" precision="precise"/>
+            <line branch="true" hits="1" number="127" precision="imprecise" condition-coverage="50% (1/2)"/>
+            <line branch="true" hits="1" number="128" precision="imprecise" condition-coverage="50% (1/2)"/>
+            <line branch="true" hits="1" number="129" precision="imprecise" condition-coverage="50% (1/2)"/>
+            <line branch="false" hits="1" number="130" precision="precise"/>
+            <line branch="false" hits="1" number="132" precision="precise"/>
+            <line branch="true" hits="1" number="133" precision="imprecise" condition-coverage="50% (1/2)"/>
+            <line branch="false" hits="0" number="136" precision="any"/>
+            <line branch="false" hits="0" number="139" precision="any"/>
+            <line branch="true" hits="1" number="140" precision="imprecise" condition-coverage="50% (1/2)"/>
+            <line branch="false" hits="0" number="141" precision="any"/>
+            <line branch="false" hits="0" number="144" precision="any"/>
+            <line branch="false" hits="1" number="146" precision="precise"/>
+            <line branch="false" hits="1" number="147" precision="precise"/>
+            <line branch="false" hits="1" number="148" precision="precise"/>
+            <line branch="false" hits="1" number="149" precision="precise"/>
+            <line branch="false" hits="1" number="150" precision="precise"/>
+            <line branch="true" hits="1" number="152" precision="imprecise" condition-coverage="50% (1/2)"/>
+            <line branch="true" hits="1" number="153" precision="imprecise" condition-coverage="50% (1/2)"/>
+            <line branch="false" hits="0" number="154" precision="any"/>
+            <line branch="true" hits="1" number="157" precision="imprecise" condition-coverage="50% (1/2)"/>
+            <line branch="false" hits="1" number="158" precision="precise"/>
+            <line branch="false" hits="1" number="159" precision="precise"/>
+            <line branch="true" hits="1" number="160" precision="imprecise" condition-coverage="50% (1/2)"/>
+          </lines>
+        </class>
+      </classes>
+    </package>
+  </packages>
+</coverage>

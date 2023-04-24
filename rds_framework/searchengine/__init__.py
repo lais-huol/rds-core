@@ -25,8 +25,8 @@ def get_search_engine_config(alias: str = "default") -> DynaBox:
 
 def search_engine(
     alias: str = "default",
-    username: str = None,
-    password: str = None,
+    username: Union[str, None] = None,
+    password: Union[str, None] = None,
 ) -> Union[opensearchpy.OpenSearch, elasticsearch.Elasticsearch]:
     se_config = get_search_engine_config(alias)
 
@@ -39,7 +39,6 @@ def search_engine(
     username = username if username else se_config["username"]
     password = password if password else se_config["password"]
     params["http_auth"] = (username, password)
-    print(params)
     client = instantiate_class(engine, se_config["hosts"].split(","), **params)
     __search_engine_cache[alias] = client
     return client
@@ -60,13 +59,19 @@ def search_engine(
 
 
 def create_index_if_not_exists(
-    index_name: str, body: Union[dict, None] = None, alias: str = "default", **kwargs
+    index: str,
+    body: Union[dict, None] = None,
+    params: Union[Dict[str, Any], None] = None,
+    headers: Union[Dict[str, Any], None] = None,
+    alias: str = "default"
 ) -> bool:
     """Cria um índice caso não exista. Retorna True se criou e False se não criou.
 
     Args:
-        index_name (str): nome do índice a ser criado
+        index (str): nome do índice a ser criado
         body (dict|None): corpo do índice
+        params (dict|None): parametros
+        headers (dict|None): cabeçalhos
         alias (str): alias para o search engine
 
     Raises:
@@ -78,7 +83,7 @@ def create_index_if_not_exists(
     if not body:
         body = {}
     try:
-        search_engine(alias).indices.create(index_name, body, **kwargs)
+        search_engine(alias).indices.create(index, body, params, headers)  # type: ignore
         return True
     except Exception as e:
         if getattr(e, "error") == "resource_already_exists_exception":
@@ -86,11 +91,16 @@ def create_index_if_not_exists(
         raise e
 
 
-def delete_index_if_exists(index_name: str, alias: str = "default", **kwargs) -> bool:
+def delete_index_if_exists(index_name: str,
+                           params: Union[Dict[str, Any], None] = None,
+                           headers: Union[Dict[str, Any], None] = None,
+                           alias: str = "default", **kwargs) -> bool:
     """Apaga um índice caso exista. Retorna True se apagou e False se não apagou.
 
     Args:
         index_name (str): nome do índice a ser criado
+        params (Dict[str, Any] | None):
+        headers (Dict[str, Any] | None): Union[Dict[str, Any], None] = None,
         alias (str): alias para o search engine
 
     Raises:
@@ -100,7 +110,7 @@ def delete_index_if_exists(index_name: str, alias: str = "default", **kwargs) ->
         bool: True se criou. False se não criou.
     """
     try:
-        search_engine(alias).indices.delete(index_name, **kwargs)
+        search_engine(alias).indices.delete(index_name, params=params, headers=headers)  # type: ignore
         return True
     except Exception as e:
         if getattr(e, "error") == "index_not_found_exception":
@@ -132,17 +142,19 @@ def search(index_name: str, body: dict, alias: str = "default") -> Any:
 
 
 def index(
-    index_name: str,
+    index: str,
     body: Union[dict, None] = None,
-    _id: Any = None,
-    alias: str = "default",
-    **kwargs,
+    id: Any = None,
+    params: Union[Dict[str, Any], None] = None,
+    headers: Union[Dict[str, Any], None] = None,
+    alias: str = "default"
 ) -> Union[Any, Any]:
     if not body:
         body = {}
-    response = search_engine(alias).index(index=index_name, body=body, id=_id, **kwargs)
-    return response
+    return search_engine(alias).index(index=index, body=body, id=id, params=params, headers=headers)  # type: ignore
 
 
-def search_engine_healthy(alias: str = "default") -> bool:
-    return search_engine(alias).ping()
+def search_engine_healthy(params: Union[Dict[str, Any], None] = None,
+                          headers: Union[Dict[str, Any], None] = None,
+                          alias: str = "default") -> bool:
+    return search_engine(alias).ping(params=params, headers=headers)

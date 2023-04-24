@@ -3,11 +3,10 @@ name: Deploy to PyPI
 on:
   push:
     tags:
-      - '*'
+      - "*"
 
 jobs:
   deploy:
-
     runs-on: ubuntu-latest
 
     steps:
@@ -29,24 +28,21 @@ jobs:
 
       - name: Lint
         run: |
-           pip install pip install flake8 flake8-csv \
-           && flake8 --statistics --benchmark --doctests --format=csv_categories --tee --output-file artifacts/flake8.csv \
-           && cat artifacts/flake8.csv
+          pip install pip install flake8 flake8-csv \
+          && flake8 --statistics --benchmark --doctests --format=csv_categories --tee --output-file artifacts/flake8.csv \
+          && cat artifacts/flake8.csv
       # TODO: estudar como salvar os artefatos
-
       # TODO: colocar de volta depois
       # - name: static-type-check
       #   run: |
       #      pip install mypy lxml \
       #      && mypy --warn-unused-configs --python-version 3.10 --show-error-context --show-column-numbers --show-error-end --show-error-codes --pretty --html-report artifacts/statictypecheck --cobertura-xml-report statictypecheck rds_framework
       # TODO: estudar como salvar os artefatos
-
       # TODO: colocar de volta depois
       # - name: unit-test
       #   run: |
       #      pip install -r requirements.txt \
       #      && python -m pytest
-
       - name: Build package
         env:
           RELEASE_VERSION: ${{ steps.vars.outputs.tag }}
