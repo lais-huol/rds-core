@@ -78,7 +78,7 @@ def create_index_if_not_exists(
     if not body:
         body = {}
     try:
-        search_engine(alias).indices.create(index, body=body, params=params, headers=headers) # type: ignore
+        search_engine(alias).indices.create(index, body=body, params=params, headers=headers)  # type: ignore
         return True
     except Exception as e:
         if getattr(e, "error", None) == "resource_already_exists_exception":
@@ -106,7 +106,7 @@ def delete_index_if_exists(index_name: str,
         bool: True se criou. False se não criou.
     """
     try:
-        search_engine(alias).indices.delete(index_name, params=params, headers=headers) # type: ignore
+        search_engine(alias).indices.delete(index_name, params=params, headers=headers)  # type: ignore
         return True
     except Exception as e:
         if getattr(e, "error", None) == "index_not_found_exception":
@@ -147,7 +147,7 @@ def index(
 ) -> Union[Any, Any]:
     if not body:
         body = {}
-    return search_engine(alias).index(index=index_name, body=body, id=id, params=params, headers=headers) # type: ignore
+    return search_engine(alias).index(index=index_name, body=body, id=id, params=params, headers=headers)  # type: ignore
 
 
 
