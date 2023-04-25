@@ -15,11 +15,6 @@ __search_engine_cache: Dict[str, Any] = {}
 
 
 def get_search_engine_config(alias: str = "default") -> DynaBox:
-    if (
-        getattr(settings, "SEARCH_ENGINES", None) is None
-        or alias not in settings.SEARCH_ENGINES
-    ):
-        raise Exception("Não existe a configuração SEARCH_ENGINES nas settings")
     return settings.SEARCH_ENGINES[alias]
 
 
@@ -83,10 +78,10 @@ def create_index_if_not_exists(
     if not body:
         body = {}
     try:
-        search_engine(alias).indices.create(index, body, params, headers)  # type: ignore
+        search_engine(alias).indices.create(index, body=body, params=params, headers=headers) # type: ignore
         return True
     except Exception as e:
-        if getattr(e, "error") == "resource_already_exists_exception":
+        if getattr(e, "error", None) == "resource_already_exists_exception":
             return False
         raise e
 
@@ -94,7 +89,8 @@ def create_index_if_not_exists(
 def delete_index_if_exists(index_name: str,
                            params: Union[Dict[str, Any], None] = None,
                            headers: Union[Dict[str, Any], None] = None,
-                           alias: str = "default", **kwargs) -> bool:
+                           alias: str = "default",
+                           fail: bool = False) -> bool:
     """Apaga um índice caso exista. Retorna True se apagou e False se não apagou.
 
     Args:
@@ -104,18 +100,18 @@ def delete_index_if_exists(index_name: str,
         alias (str): alias para o search engine
 
     Raises:
-        exception: Erro conforme retornado pelo Search Engine.
+        Exception: Erro conforme retornado pelo Search Engine.
 
     Returns:
         bool: True se criou. False se não criou.
     """
     try:
-        search_engine(alias).indices.delete(index_name, params=params, headers=headers)  # type: ignore
+        search_engine(alias).indices.delete(index_name, params=params, headers=headers) # type: ignore
         return True
     except Exception as e:
-        if getattr(e, "error") == "index_not_found_exception":
+        if getattr(e, "error", None) == "index_not_found_exception":
             return False
-        raise e
+        raise Exception(e)
 
 
 def query(
@@ -142,7 +138,7 @@ def search(index_name: str, body: dict, alias: str = "default") -> Any:
 
 
 def index(
-    index: str,
+    index_name: str,
     body: Union[dict, None] = None,
     id: Any = None,
     params: Union[Dict[str, Any], None] = None,
@@ -151,10 +147,12 @@ def index(
 ) -> Union[Any, Any]:
     if not body:
         body = {}
-    return search_engine(alias).index(index=index, body=body, id=id, params=params, headers=headers)  # type: ignore
+    return search_engine(alias).index(index=index_name, body=body, id=id, params=params, headers=headers) # type: ignore
+
 
 
 def search_engine_healthy(params: Union[Dict[str, Any], None] = None,
                           headers: Union[Dict[str, Any], None] = None,
                           alias: str = "default") -> bool:
+    print(search_engine(alias).ping)
     return search_engine(alias).ping(params=params, headers=headers)

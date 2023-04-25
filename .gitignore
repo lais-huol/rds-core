@@ -1,7 +1,8 @@
 coverage/
 artifacts/
 /docs/
-/public/
+public/
+coverage/
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
@@ -40,7 +41,7 @@ MANIFEST
 pip-log.txt
 pip-delete-this-directory.txt
 
-# Unit tests_rds_core / coverage reports
+# Unit tests_bds_framework / coverage reports
 htmlcov/
 .tox/
 .coverage
