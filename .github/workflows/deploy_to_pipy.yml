@@ -53,6 +53,7 @@ jobs:
           name: all-artifacts
           path: |
             artifacts
+            coverage
 
       - name: Build package
         env:
