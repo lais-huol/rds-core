@@ -53,13 +53,8 @@ jobs:
           name: artifacts
           path: |
             artifacts
-
-      - name: Coverage QA artifacts
-        uses: actions/upload-artifact@v3
-        with:
-          name: coverage
-          path: |
             coverage
+
       - name: Build package
         env:
           RELEASE_VERSION: ${{ steps.vars.outputs.tag }}
