@@ -70,6 +70,6 @@ setup(
     ],
     package_dir={"rds_core": "rds_core"},
     package_data=package_data_dirs("rds_core", []),
-    download_url="https://github.com/lais-huol/rds-cep-python/tags",
-    url="https://github.com/lais-huol/rds-cep-python",
+    download_url="https://github.com/lais-huol/rds-core/tags",
+    url="https://github.com/lais-huol/rds-core",
 )
