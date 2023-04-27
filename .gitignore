@@ -3,6 +3,7 @@ artifacts/
 /docs/
 public/
 coverage/
+statictypecheck/
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
