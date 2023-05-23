@@ -39,7 +39,7 @@ with open("requirements.txt", "w") as file1:
 
 setup(
     name="rds-core",
-    version="0.0.17",
+    version="0.0.18",
     description="Framework para serviços do Rede de Dados em Saúde do LAIS",
     long_description="É uma biblioteca pública em Python que condensa um conjunto de boas práticas para o"
     " desenvolvimento das aplicações que compõem a Rede da Dados em Saúde (RDS) RDS do Laboratório de"
@@ -69,6 +69,9 @@ setup(
         "rds_core.config",
         "rds_core.helpers",
         "rds_core.searchengine",
+        "rds_core.transformers",
+        "rds_core.transformers.fields",
+        "rds_core.transformers.models",
     ],
     package_dir={"rds_core": "rds_core"},
     package_data=package_data_dirs("rds_core", []),
