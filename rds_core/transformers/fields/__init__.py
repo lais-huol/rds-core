@@ -23,7 +23,7 @@ class Field:
         if self.source_field is None:
             dest_dict[dest_fieldname] = None
         else:
-            dest_dict[dest_fieldname] = self.cast(
+            dest_dict[dest_fieldname] = self.cast_source_value(
                 get_dict_by_pathname(source_dict, self.source_field)
             )
 
@@ -69,7 +69,10 @@ class SimpleConcatField(Field):
     ) -> str:
         if self.fields is not None:
             dest_dict[dest_fieldname] = self.separator.join(
-                [self.cast(get_dict_by_pathname(source_dict, f)) for f in self.fields]
+                [
+                    self.cast_source_value(get_dict_by_pathname(source_dict, f))
+                    for f in self.fields
+                ]
             )
 
 
