@@ -1,7 +1,7 @@
 import logging
 from typing import Union, Dict, Any, List
 from datetime import datetime
-from rds_core.helpers import get_by_keypath
+from rds_core.helpers import get_dict_by_pathname
 
 strptime = datetime.strptime
 
@@ -24,7 +24,7 @@ class Field:
             dest_dict[dest_fieldname] = None
         else:
             dest_dict[dest_fieldname] = self.cast(
-                get_by_keypath(source_dict, self.source_field)
+                get_dict_by_pathname(source_dict, self.source_field)
             )
 
     def cast_source_value(self, source_value: Union[str, int, bool, float]):
@@ -69,7 +69,7 @@ class SimpleConcatField(Field):
     ) -> str:
         if self.fields is not None:
             dest_dict[dest_fieldname] = self.separator.join(
-                [self.cast(get_by_keypath(source_dict, f)) for f in self.fields]
+                [self.cast(get_dict_by_pathname(source_dict, f)) for f in self.fields]
             )
 
 
