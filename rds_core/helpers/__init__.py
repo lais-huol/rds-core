@@ -33,7 +33,12 @@ def str2bool(v):
 
 def env(name, default=None, wrapped=False):
     result = getenv(name, default)
-    if wrapped and isinstance(result, str) and result[0:1] == "'" and result[-1:] == "'":
+    if (
+        wrapped
+        and isinstance(result, str)
+        and result[0:1] == "'"
+        and result[-1:] == "'"
+    ):
         return result[1:-1]
     return result
 
@@ -74,7 +79,9 @@ def get_class(full_class_name: str) -> Any:
     return getattr(importlib.import_module(module_name), class_name)
 
 
-def instantiate_class(full_class_name: str, *args: List, **kwargs: Dict[str, Any]) -> Any:
+def instantiate_class(
+    full_class_name: str, *args: List, **kwargs: Dict[str, Any]
+) -> Any:
     Klass = get_class(full_class_name)
     return Klass(*args, **kwargs)
 
@@ -105,7 +112,7 @@ def get_dict_by_pathname(obj: dict, ref: str) -> Any:
         idstart = key.find("[")
         embedslist = 1 if idstart > 0 else 0
         if embedslist:
-            idx = int(key[idstart + 1 : key.find("]")])
+            idx = int(key[idstart + 1: key.find("]")])
             kyx = key[:idstart]
             try:
                 val = val[kyx][idx]

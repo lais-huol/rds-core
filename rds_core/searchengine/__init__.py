@@ -58,7 +58,7 @@ def create_index_if_not_exists(
     body: Union[dict, None] = None,
     params: Union[Dict[str, Any], None] = None,
     headers: Union[Dict[str, Any], None] = None,
-    alias: str = "default"
+    alias: str = "default",
 ) -> bool:
     """Cria um índice caso não exista. Retorna True se criou e False se não criou.
 
@@ -86,11 +86,13 @@ def create_index_if_not_exists(
         raise e
 
 
-def delete_index_if_exists(index_name: str,
-                           params: Union[Dict[str, Any], None] = None,
-                           headers: Union[Dict[str, Any], None] = None,
-                           alias: str = "default",
-                           fail: bool = False) -> bool:
+def delete_index_if_exists(
+    index_name: str,
+    params: Union[Dict[str, Any], None] = None,
+    headers: Union[Dict[str, Any], None] = None,
+    alias: str = "default",
+    fail: bool = False,
+) -> bool:
     """Apaga um índice caso exista. Retorna True se apagou e False se não apagou.
 
     Args:
@@ -143,16 +145,23 @@ def index(
     id: Any = None,
     params: Union[Dict[str, Any], None] = None,
     headers: Union[Dict[str, Any], None] = None,
-    alias: str = "default"
+    alias: str = "default",
 ) -> Union[Any, Any]:
     if not body:
         body = {}
-    return search_engine(alias).index(index=index_name, body=body, id=id, params=params, headers=headers)  # type: ignore
+    return search_engine(alias).index(
+        index=index_name,
+        body=body,
+        id=id,
+        params=params,
+        headers=headers,
+    )  # type: ignore
 
 
-
-def search_engine_healthy(params: Union[Dict[str, Any], None] = None,
-                          headers: Union[Dict[str, Any], None] = None,
-                          alias: str = "default") -> bool:
+def search_engine_healthy(
+    params: Union[Dict[str, Any], None] = None,
+    headers: Union[Dict[str, Any], None] = None,
+    alias: str = "default",
+) -> bool:
     print(search_engine(alias).ping)
     return search_engine(alias).ping(params=params, headers=headers)

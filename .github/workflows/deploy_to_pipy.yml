@@ -21,10 +21,10 @@ jobs:
           RELEASE_VERSION: ${{ steps.vars.outputs.tag }}
         run: echo $RELEASE_VERSION
 
-      - name: Set up Python 3.9
+      - name: Set up Python 3.8
         uses: actions/setup-python@v3
         with:
-          python-version: 3.9
+          python-version: 3.8
 
       - name: Configure artifacts directory
         run: mkdir artifacts
@@ -39,7 +39,7 @@ jobs:
         continue-on-error: true
         run: |
           pip install mypy lxml \
-          && mypy --warn-unused-configs --python-version 3.10 --show-error-context --show-column-numbers --show-error-end --show-error-codes --pretty --html-report artifacts/statictypecheck --cobertura-xml-report statictypecheck rds_core
+          && mypy --warn-unused-configs --python-version 3.8 --show-error-context --show-column-numbers --show-error-end --show-error-codes --pretty --html-report artifacts/statictypecheck --cobertura-xml-report statictypecheck rds_core
 
       - name: Unit test
         continue-on-error: true
