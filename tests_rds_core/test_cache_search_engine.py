@@ -1,17 +1,16 @@
 import unittest
 import pytest
-from rds_core.cache import caches
-from rds_core.searchengine import create_index_if_not_exists, delete_index_if_exists
+from rds.core.cache import caches
+from rds.core.searchengine import create_index_if_not_exists, delete_index_if_exists
 from cache_mixin import CacheMixin
 
 
 class TestSearchEngineCache(CacheMixin, unittest.TestCase):
-
-    def __init__(self, method_name: str = 'runTest') -> None:
+    def __init__(self, method_name: str = "runTest") -> None:
         super(TestSearchEngineCache, self).__init__(method_name)
-        self.test_index = 'test_index_cache'
-        self.cache = caches['search_engine']
-        self.cache_name = 'search_engine'
+        self.test_index = "test_index_cache"
+        self.cache = caches["search_engine"]
+        self.cache_name = "search_engine"
 
     def setUp(self):
         delete_index_if_exists(self.test_index)
@@ -27,5 +26,6 @@ class TestSearchEngineCache(CacheMixin, unittest.TestCase):
 
     def test_binary_string(self):
         from zlib import compress
+
         with self.assertRaises(ValueError):
-            self.cache.set('key', compress("value_to_be_compressed".encode()))
+            self.cache.set("key", compress("value_to_be_compressed".encode()))

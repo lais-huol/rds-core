@@ -1,13 +1,13 @@
 import datetime
-from rds_core.cache import caches
+from rds.core.cache import caches
 
 
 class CacheMixin:
+    def __init__(self, method_name: str = "runTest") -> None:
+        from rds.core.cache.nocache import NoCache
 
-    def __init__(self, method_name: str = 'runTest') -> None:
-        from rds_core.cache.nocache import NoCache
         self.cache = NoCache()
-        self.cache_name = 'default'
+        self.cache_name = "default"
         super().__init__(method_name)
 
     def setUp(self):
@@ -18,7 +18,7 @@ class CacheMixin:
 
     def test_key_exists(self):
         self.assertFalse(self.cache.key_exists("test_has_key"))
-        self.cache.add("test_has_key", 'value')
+        self.cache.add("test_has_key", "value")
         self.assertTrue(self.cache.key_exists("test_has_key"))
 
     def test_add(self):
@@ -28,18 +28,18 @@ class CacheMixin:
 
     def test_get(self):
         self.assertTrue(self.cache.add("test_get", "value1"))
-        self.assertEqual(self.cache.get("test_get"), 'value1')
+        self.assertEqual(self.cache.get("test_get"), "value1")
         self.assertIsNone(self.cache.get("test_get_invalid"))
-        self.assertEqual(self.cache.get("test_get_invalid", 'value1'), 'value1')
+        self.assertEqual(self.cache.get("test_get_invalid", "value1"), "value1")
 
     def test_set(self):
         self.assertIsNone(self.cache.set("test_set", "value1"))
-        self.assertEqual(self.cache.get("test_set"), 'value1')
+        self.assertEqual(self.cache.get("test_set"), "value1")
 
     def test_get_or_set(self):
         self.assertIsNone(self.cache.get("test_get_or_set"), None)
-        self.assertEqual(self.cache.get_or_set("test_get_or_set", "value1"), 'value1')
-        self.assertEqual(self.cache.get("test_get_or_set"), 'value1')
+        self.assertEqual(self.cache.get_or_set("test_get_or_set", "value1"), "value1")
+        self.assertEqual(self.cache.get("test_get_or_set"), "value1")
 
     def test_default_used_when_none_is_set(self):
         """If None is cached, get() returns it instead of the default."""
@@ -54,8 +54,8 @@ class CacheMixin:
         self.assertFalse(self.cache.get("test_datatype__bool"))
 
     def test_datatype_str(self):
-        self.cache.set("test_datatype_str", 'string')
-        self.assertEqual(self.cache.get("test_datatype_str"), 'string')
+        self.cache.set("test_datatype_str", "string")
+        self.assertEqual(self.cache.get("test_datatype_str"), "string")
 
     def test_datatype_int(self):
         self.cache.set("test_datatype_int", 123)
@@ -84,7 +84,7 @@ class CacheMixin:
         self.assertEqual(self.cache.get("test_datatype_tuple"), [1, 2, 3, 500, 4])
 
     def test_datatype_dict_simples(self):
-        d = {'a': 1, 'b': '1', 'c': 2.0}
+        d = {"a": 1, "b": "1", "c": 2.0}
         self.cache.set("test_datatype_dict_simples", d)
         self.assertEqual(self.cache.get("test_datatype_dict_simples"), d)
 
@@ -95,7 +95,7 @@ class CacheMixin:
             "test_datatype__bool_None": None,
             "test_datatype__bool_True": True,
             "test_datatype__bool_False": False,
-            "test_datatype_str": 'string',
+            "test_datatype_str": "string",
             "test_datatype_int": 123,
             "test_datatype_float": 1.23,
             "test_datatype_date": hoje,
@@ -108,7 +108,7 @@ class CacheMixin:
             "test_datatype__bool_None": None,
             "test_datatype__bool_True": True,
             "test_datatype__bool_False": False,
-            "test_datatype_str": 'string',
+            "test_datatype_str": "string",
             "test_datatype_int": 123,
             "test_datatype_float": 1.23,
             "test_datatype_date": hoje.isoformat(),

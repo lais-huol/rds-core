@@ -12,9 +12,7 @@ def fast_scandir(dirname):
 def package_data_dirs(root, data_dirs):
     data_dirs_path = [x + "/*" for x in data_dirs]
     for data_dir in data_dirs:
-        data_dirs_path += [
-            x.replace(f"{root}/", "") + "/*" for x in fast_scandir(f"{root}/{data_dir}")
-        ]
+        data_dirs_path += [x.replace(f"{root}/", "") + "/*" for x in fast_scandir(f"{root}/{data_dir}")]
 
     return {root: data_dirs_path}
 
@@ -24,13 +22,6 @@ requirements = [
     "dynaconf>=3.1.11",
     # HTTP clients
     "requests>=2.28.1",
-    # LAIS public Python libraries
-    "dbc-reader>=0.1.1",
-    # Search engine
-    "opensearch_py>=2.0.0",
-    "opensearch_dsl>=2.0.1",
-    "elasticsearch>=7.17.6",
-    "elasticsearch_dsl>=7.4.0",
 ]
 
 with open("requirements.txt", "w") as file1:
@@ -65,17 +56,23 @@ setup(
     python_requires=">=3.8",
     install_requires=requirements,
     packages=[
-        "rds_core",
-        "rds_core.cache",
-        "rds_core.config",
-        "rds_core.helpers",
-        "rds_core.searchengine",
-        "rds_core.transformers",
-        "rds_core.transformers.fields",
-        "rds_core.transformers.models",
+        "rds",
+        "rds.core",
+        "rds.core.cache",
+        "rds.core.config",
+        "rds.core.helpers",
+        "rds.core.searchengine",
+        "rds.core.transformers",
+        "rds.core.transformers.fields",
+        "rds.core.transformers.models",
+        "rds.core.transformers.models",
+        "rds.contrib",
+        "rds.contrib.datasus",
+        "rds.contrib.datasus.transformers",
+        "rds.contrib.datasus.transformers.fields",
     ],
-    package_dir={"rds_core": "rds_core"},
-    package_data=package_data_dirs("rds_core", []),
+    package_dir={"rds": "rds"},
+    package_data=package_data_dirs("rds.core", []),
     download_url="https://github.com/lais-huol/rds-core/tags",
     url="https://github.com/lais-huol/rds-core",
 )

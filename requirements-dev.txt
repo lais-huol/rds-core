@@ -1,9 +1,17 @@
-# DEV
-mypy
-lxml
+black
 flake8
-types-requests
-pytest>=7.1.3
-pytest-cov>=4.0.0
-pytest-profiling>=1.7.0
+http-server-mock
+ipdb
+mypy
 pdoc3
+pre-commit
+pytest
+pytest-cov
+pytest-profiling
+ruff
+types-requests
+
+opensearch_py>=2.0.0
+opensearch_dsl>=2.0.1
+elasticsearch>=7.17.6
+elasticsearch_dsl>=7.4.0

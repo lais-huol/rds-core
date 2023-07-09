@@ -1,5 +1,5 @@
 docker build -t rds-core .
 
-docker run -it --rm -v `pwd`:/app rds-core bash -c 'flake8 --statistics --benchmark --doctests'
+docker run -it --rm -v `pwd`:/app rds-core bash -c 'ruff .'
 
-docker run -it --rm -v `pwd`:/app rds-core bash -c 'mypy --warn-unused-configs --python-version 3.8 --show-error-context --show-column-numbers --show-error-end --show-error-codes --pretty rds_core'
+docker run --user 1000 -it --rm -v `pwd`:/app rds-core bash -c 'python -m pytest -s'

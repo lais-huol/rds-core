@@ -6,7 +6,7 @@ import opensearchpy
 
 from dynaconf.vendor.box.exceptions import BoxKeyError
 
-from rds_core.searchengine import (
+from rds.core.searchengine import (
     create_index_if_not_exists,
     delete_index_if_exists,
     get_search_engine_config,
@@ -42,15 +42,11 @@ class TestSearchEngine(unittest.TestCase):
 
     def test_invalid_index_deletion(self):
         with self.assertRaises(Exception):
-            delete_index_if_exists(
-                "nem_criei_ainda", params={"ignore_unavailable": False}
-            )
+            delete_index_if_exists("nem_criei_ainda", params={"ignore_unavailable": False})
 
     def test_get_search_engine_config_valid(self):
         self.assertIsInstance(get_search_engine_config(), dynaconf.utils.boxing.DynaBox)
-        self.assertIsInstance(
-            get_search_engine_config("default"), dynaconf.utils.boxing.DynaBox
-        )
+        self.assertIsInstance(get_search_engine_config("default"), dynaconf.utils.boxing.DynaBox)
 
     def test_get_search_engine_config__invalid(self):
         with self.assertRaises(BoxKeyError):
@@ -80,12 +76,8 @@ class TestSearchEngine(unittest.TestCase):
 
     # @openmock
     def test_index_document(self):
-        self.assertIsInstance(
-            index(self.test_index, {"username": "admin", "firstname": "Admin"}), dict
-        )
-        self.assertIsInstance(
-            index(self.test_index, {"username": "admin", "firstname": "Admin"}), dict
-        )
+        self.assertIsInstance(index(self.test_index, {"username": "admin", "firstname": "Admin"}), dict)
+        self.assertIsInstance(index(self.test_index, {"username": "admin", "firstname": "Admin"}), dict)
         self.assertIsInstance(
             index(self.test_index, {"username": "admin", "firstname": "Admin"}, "1"),
             dict,

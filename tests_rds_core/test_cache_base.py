@@ -1,11 +1,10 @@
 import unittest
 import pytest
-from rds_core.cache.base import BaseCache
+from rds.core.cache.base import BaseCache
 
 
 class TestBaseCase(unittest.TestCase):
-
-    def __init__(self, method_nname: str = 'runTest'):
+    def __init__(self, method_nname: str = "runTest"):
         self.cache = BaseCache()
         super().__init__(methodName=method_nname)
 

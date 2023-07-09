@@ -1,13 +1,12 @@
 import datetime
 import unittest
-from rds_core.cache import caches
+from rds.core.cache import caches
 
 
 class NoCacheTests(unittest.TestCase):
-
-    def __init__(self, methodName: str = 'runTest'):
+    def __init__(self, methodName: str = "runTest"):
         super(NoCacheTests, self).__init__(methodName)
-        self.cache_name = 'default'
+        self.cache_name = "default"
         self.cache = caches[self.cache_name]
 
     def setUp(self):
@@ -20,21 +19,21 @@ class NoCacheTests(unittest.TestCase):
         self.assertTrue(self.cache.add("addkey1", "value"))
 
     def test_key_exists(self):
-        self.assertTrue(self.cache.add("test_has_key", 'value'))
+        self.assertTrue(self.cache.add("test_has_key", "value"))
         self.assertFalse(self.cache.key_exists("test_has_key"))
 
     def test_get(self):
         self.assertTrue(self.cache.add("test_get", "value1"))
-        self.assertIsNone(self.cache.get("test_get"), 'value1')
+        self.assertIsNone(self.cache.get("test_get"))
 
     def test_set(self):
         self.assertIsNone(self.cache.set("test_set", "value1"))
-        self.assertIsNone(self.cache.get("test_set"), 'value1')
+        self.assertIsNone(self.cache.get("test_set"))
 
     def test_get_or_set(self):
-        self.assertIsNone(self.cache.get("test_get_or_set"), None)
-        self.assertEqual(self.cache.get_or_set("test_get_or_set", "value1"), 'value1')
-        self.assertIsNone(self.cache.get("test_get_or_set"), 'value1')
+        self.assertIsNone(self.cache.get("test_get_or_set"))
+        self.assertEqual(self.cache.get_or_set("test_get_or_set", "value1"), "value1")
+        self.assertIsNone(self.cache.get("test_get_or_set"), "value1")
 
     def test_default_used_when_none_is_set(self):
         self.assertIsNone(self.cache.set("test_default_used_when_none_is_set", None))
@@ -44,7 +43,7 @@ class NoCacheTests(unittest.TestCase):
         self.assertIsNone(self.cache.set("test_datatype__bool", True))
 
     def test_datatype_str(self):
-        self.assertIsNone(self.cache.set("test_datatype_str", 'string'))
+        self.assertIsNone(self.cache.set("test_datatype_str", "string"))
 
     def test_datatype_int(self):
         self.assertIsNone(self.cache.set("test_datatype_int", 123))
@@ -65,7 +64,7 @@ class NoCacheTests(unittest.TestCase):
         self.assertIsNone(self.cache.set("test_datatype_tuple", (1, 2, 3, 500, 4)))
 
     def test_datatype_dict_simples(self):
-        self.assertIsNone(self.cache.set("test_datatype_dict_simples", {'a': 1, 'b': '1', 'c': 2.0}))
+        self.assertIsNone(self.cache.set("test_datatype_dict_simples", {"a": 1, "b": "1", "c": 2.0}))
 
     def test_delete(self):
         self.assertIsNone(self.cache.set("test_delete", "spam"))
@@ -90,12 +89,12 @@ class NoCacheTests(unittest.TestCase):
                 self.assertIsNone(self.cache.set(key, value))
 
         # Test `add`
-        for (key, value) in stuff.items():
+        for key, value in stuff.items():
             with self.subTest(key=key):
                 self.assertTrue(self.cache.add(key, value), True)
 
         # Test `delete`
-        for (key, value) in stuff.items():
+        for key, value in stuff.items():
             self.assertIsNone(self.cache.delete(key))
 
         # Test `set_many`
