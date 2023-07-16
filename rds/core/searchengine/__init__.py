@@ -101,21 +101,65 @@ def query(
     query_string: Union[str, int, float, datetime.date, datetime.datetime],
     fields: Union[List, None] = None,
     alias: str = "default",
+    username: Union[str, None] = None,
+    password: Union[str, None] = None,
 ) -> Any:
     if fields is None:
         fields = []
-    response = search_engine(alias).search(
+    response = search_engine(alias, username, password).search(
         index=index_name,
         body={
-            "size": 5,
             "query": {"multi_match": {"query": query_string, "fields": fields}},
         },
     )
     return response["hits"]["hits"], response["hits"]["total"]["value"]
 
 
-def search(index_name: str, body: dict, alias: str = "default") -> Any:
-    response = search_engine(alias).search(index=index_name, body=body)
+class ToManyHits(Exception):
+    pass
+
+
+def get_by_term(
+    index_name: str,
+    term: str,
+    term_value: Union[str, int, float, datetime.date, datetime.datetime],
+    fields: Union[List, None] = None,
+    alias: str = "default",
+    username: Union[str, None] = None,
+    password: Union[str, None] = None,
+) -> Any:
+    if fields is None:
+        fields = []
+    response = search_engine(alias, username, password).search(
+        index=index_name,
+        body={"query": {"term": {term: term_value}}},
+    )
+    if response["hits"]["total"]["value"] != 1:
+        raise ToManyHits()
+    return response["hits"]["hits"][0]
+
+
+def getsource_by_term(
+    index_name: str,
+    term: str,
+    term_value: Union[str, int, float, datetime.date, datetime.datetime],
+    fields: Union[List, None] = None,
+    alias: str = "default",
+    username: Union[str, None] = None,
+    password: Union[str, None] = None,
+) -> Any:
+    response = get_by_term(index_name, term, term_value, fields, alias, username, password)
+    return response["_source"]
+
+
+def search(
+    index_name: str,
+    body: dict,
+    alias: str = "default",
+    username: Union[str, None] = None,
+    password: Union[str, None] = None,
+) -> Any:
+    response = search_engine(alias, username, password).search(index=index_name, body=body)
     return response["hits"]["hits"], response["hits"]["total"]["value"]
 
 
