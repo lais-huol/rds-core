@@ -30,7 +30,7 @@ with open("requirements.txt", "w") as file1:
 
 setup(
     name="rds-core",
-    version="0.2.2",
+    version="0.2.3",
     description="Framework para serviços do Rede de Dados em Saúde do LAIS",
     long_description="É uma biblioteca pública em Python que condensa um conjunto de boas práticas para o"
     " desenvolvimento das aplicações que compõem a Rede da Dados em Saúde (RDS) RDS do Laboratório de"
