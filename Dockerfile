@@ -1,4 +1,4 @@
-FROM python:3.8-bullseye
+FROM python:3.12.1-slim-bookworm
 
 ADD requirements.txt /
 ADD requirements-dev.txt /
