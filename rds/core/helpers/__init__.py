@@ -1,6 +1,7 @@
 """
 Documentar.
 """
+
 from typing import Any, List, Dict
 import logging
 import json
@@ -33,12 +34,7 @@ def str2bool(v):
 
 def env(name, default=None, wrapped=False):
     result = getenv(name, default)
-    if (
-        wrapped
-        and isinstance(result, str)
-        and result[0:1] == "'"
-        and result[-1:] == "'"
-    ):
+    if wrapped and isinstance(result, str) and result[0:1] == "'" and result[-1:] == "'":
         return result[1:-1]
     return result
 
@@ -79,9 +75,7 @@ def get_class(full_class_name: str) -> Any:
     return getattr(importlib.import_module(module_name), class_name)
 
 
-def instantiate_class(
-    full_class_name: str, *args: List, **kwargs: Dict[str, Any]
-) -> Any:
+def instantiate_class(full_class_name: str, *args: List, **kwargs: Dict[str, Any]) -> Any:
     Klass = get_class(full_class_name)
     return Klass(*args, **kwargs)
 
@@ -122,3 +116,39 @@ def get_dict_by_pathname(obj: dict, ref: str) -> Any:
         else:
             val = val.get(key, None) if val is not None else None
     return val
+
+
+class Color:
+    ENDC = "\033[0m"
+
+    def r(text: str) -> str:
+        """Returns a *red* string"""
+        return f"\033[91m{text}{Color.ENDC}"
+
+    def b(text: str) -> str:
+        """Returns a *blue* string"""
+        return f"\033[94m{text}{Color.ENDC}"
+
+    def g(text: str) -> str:
+        """Returns a *green* string"""
+        return f"\033[92m{text}{Color.ENDC}"
+
+    def c(text: str) -> str:
+        """Returns a *cyan* string"""
+        return f"\033[96m{text}{Color.ENDC}"
+
+    def m(text: str) -> str:
+        """Returns a *magenta* string"""
+        return f"\033[95m{text}{Color.ENDC}"
+
+    def y(text: str) -> str:
+        """Returns a *yellow* string"""
+        return f"\033[93m{text}{Color.ENDC}"
+
+    def s(text: str) -> str:
+        """Returns a *strong* string"""
+        return f"\033[1m{text}{Color.ENDC}"
+
+    def u(text: str) -> str:
+        """Returns a *underlined* string"""
+        return f"\033[4m{text}{Color.ENDC}"
