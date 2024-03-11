@@ -1,4 +1,5 @@
 from typing import Dict, Any
+
 from dynaconf.utils.boxing import DynaBox
 from rds.core.config import settings
 from rds.core.helpers import instantiate_class
@@ -9,11 +10,11 @@ class ToManyHits(Exception):
     pass
 
 
-RDS_HOSTS = settings.get("RDS", {}).get("hosts", "https://api.opensearch.dev.lais.ufrn.br")
+RDS_HOSTS = "https://api.opensearch.dev.lais.ufrn.br"
 RDS_MAIN_HOST = RDS_HOSTS.split(",")[:1]
 
 
-def _get_searchengine_config(clustername: str = "default") -> DynaBox:
+def get_searchengine_config(clustername: str = "default") -> DynaBox:
     if settings.get("SEARCH_ENGINES", None) and settings.SEARCH_ENGINES.get(clustername, None):
         return settings.SEARCH_ENGINES.get(clustername, None)
 
@@ -32,8 +33,7 @@ def _get_searchengine_config(clustername: str = "default") -> DynaBox:
 def searchengines(
     clustername: str = "default", username: str | None = None, password: str | None = None
 ) -> SearchEngineAdapter:
-
-    config = _get_searchengine_config(clustername)
+    config = get_searchengine_config(clustername)
     dialect = config.get("dialect", "opensearch")
     if dialect.lower() != "opensearch":
         raise NotImplementedError(f"Dialect {dialect} not implemented yet. Possibles: opensearch.")
@@ -47,3 +47,6 @@ def searchengines(
     return instantiate_class(
         "rds.core.searchengine.adapters.opensearchadapter.OpenSearchAdapter", cluster_name=clustername, **params
     )
+
+
+default_se = searchengines("default")

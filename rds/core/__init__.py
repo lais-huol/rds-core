@@ -4,28 +4,13 @@ RDS é **acrônimo** para Rede de Dados em Saúde. Este framework/api condensa u
 desenvolvimento das aplicações que compõem ou comporão a RDS do LAIS e dos parceiros que contratarem o LAIS para fazer
 suas próprias RDS, a exemplo REDS-RN e RDS-ES.
 """
-from typing import Optional, Union, Any, List
-from enum import Enum
+from typing import Any
+from datetime import datetime, date
 from requests import get as original_get, auth
+from requests.auth import HTTPBasicAuth
 from rds.core.config import settings
-from rds.core.searchengine import searchengines, ToManyHits, RDS_HOSTS
+from rds.core.searchengine import searchengines, RDS_HOSTS
 from opensearchpy import Search
-
-
-class TEMPERATURE:
-    COLD = "COLD"
-    WARN = "WARN"
-    HOT = "HOT"
-
-
-def cold(source):
-    source["@temperature"] = TEMPERATURE.COLD
-    return source
-
-
-def warn_hot(source):
-    source["@temperature"] = TEMPERATURE.WARN if source.get("@cached", False) else TEMPERATURE.HOT
-    return source
 
 
 class Service:
@@ -54,8 +39,10 @@ class Resource:
 
     def __init__(self, cluster: str = "default") -> None:
         self._searchengine = None
-        self._cluster = "default"
+        self._cluster = cluster
         self._index_name = None
+        cfg = settings.get("RDS", {"username": "", "password": ""})
+        self._basicAuth = HTTPBasicAuth(cfg.get("username", ""), cfg.get("password", ""))
 
     @property
     def cluster(self) -> str:
@@ -65,9 +52,9 @@ class Resource:
 
     @property
     def index_name(self) -> str:
-        if self._index_name is None:
-            raise ValueError("Informe o índice no construtor da classe.")
-        return self._index_name
+        if self._index_name is None and getattr(self.__class__, "_index_name", None) is None:
+            raise ValueError("Informe o índice no construtor da classe ou na classe.")
+        return self._index_name or self.__class__._index_name
 
     @property
     def searchengine(self):
@@ -95,16 +82,18 @@ class Resource:
 
     @property
     def search(self):
-        return Search(using=self.se, index=self.index_name)
+        return Search(using=self.searchengine, index=self.index_name)
 
-    def query(self, query: dict, filter_path: Optional[List[str]] = None, *args, **kwargs) -> dict:
+    def query(self, query: dict, filter_path: list[str] | None = None, *args, **kwargs) -> dict:
         return self.searchengine.search(
             index=self.index_name, body={"query": query}, filter_path=filter_path, *args, **kwargs
         )
 
     def _get(self, url: str) -> dict:
-        basic = auth.HTTPBasicAuth(**dict(settings.get("RDS")))
-        response = original_get(url, auth=basic)
+        response = original_get(url, auth=self._basicAuth)
         if response.status_code != 200:
             raise Exception(response.text)
         return response.json()
+
+    def get_by_term(self, term: str, term_value: Any, fields: list[str] | None = None) -> dict | None:
+        return self.searchengine.get_by_term(self.index_name, term, term_value, fields)

@@ -1,7 +1,85 @@
 # -*- coding: utf-8 -*-
-from typing import Any, Self
+from typing import Any, Self, Callable
 from datetime import datetime, date
 from abc import ABC, abstractmethod
+from functools import wraps
+
+
+GLOBAL_PARAMS = ("pretty", "human", "error_trace", "format", "filter_path")
+string_types = str, bytes
+
+
+def _escape(value: Any) -> Any:
+    """
+    Escape a single value of a URL string or a query parameter. If it is a list
+    or tuple, turn it into a comma-separated string first.
+    """
+
+    # make sequences into comma-separated stings
+    if isinstance(value, (list, tuple)):
+        value = ",".join(value)
+
+    # dates and datetimes into isoformat
+    elif isinstance(value, (date, datetime)):
+        value = value.isoformat()
+
+    # make bools into true/false strings
+    elif isinstance(value, bool):
+        value = str(value).lower()
+
+    # don't decode bytestrings
+    elif isinstance(value, bytes):
+        return value
+
+    # encode strings to utf-8
+    if isinstance(value, string_types):
+        if isinstance(value, str):
+            return value.encode("utf-8")
+
+    return str(value)
+
+
+def query_params(*opensearch_query_params: Any) -> Callable:  # type: ignore
+    """
+    Decorator that pops all accepted parameters from method's kwargs and puts
+    them in the params argument.
+    """
+
+    def _wrapper(func: Any) -> Any:
+        @wraps(func)
+        def _wrapped(*args: Any, **kwargs: Any) -> Any:
+            params = (kwargs.pop("params", None) or {}).copy()
+            headers = {k.lower(): v for k, v in (kwargs.pop("headers", None) or {}).copy().items()}
+
+            if "opaque_id" in kwargs:
+                headers["x-opaque-id"] = kwargs.pop("opaque_id")
+
+            http_auth = kwargs.pop("http_auth", None)
+            api_key = kwargs.pop("api_key", None)
+
+            if http_auth is not None and api_key is not None:
+                raise ValueError("Only one of 'http_auth' and 'api_key' may be passed at a time")
+            elif http_auth is not None:
+                headers["authorization"] = "Basic %s" % (_base64_auth_header(http_auth),)
+            elif api_key is not None:
+                headers["authorization"] = "ApiKey %s" % (_base64_auth_header(api_key),)
+
+            # don't escape ignore, request_timeout, or timeout
+            for p in ("ignore", "request_timeout", "timeout"):
+                if p in kwargs:
+                    params[p] = kwargs.pop(p)
+
+            for p in opensearch_query_params + GLOBAL_PARAMS:
+                if p in kwargs:
+                    v = kwargs.pop(p)
+                    if v is not None:
+                        params[p] = _escape(v)
+
+            return func(*args, params=params, headers=headers, **kwargs)
+
+        return _wrapped
+
+    return _wrapper
 
 
 class ToManyHits(Exception):
@@ -152,150 +230,478 @@ class SearchEngineAdapter(ABC):
     def http(self) -> HttpClient:
         return self._http
 
-    @abstractmethod
-    def __repr__(self) -> Any: ...
+    def __repr__(self) -> Any:
+        return self._wrapped.__repr__()
 
-    @abstractmethod
-    def __enter__(self) -> Any: ...
+    def __enter__(self) -> Any:
+        return self._wrapped.__enter__()
 
-    @abstractmethod
-    def __exit__(self, *_: Any) -> None: ...
+    def __exit__(self, *_: Any) -> None:
+        self._wrapped.__exit__(_)
 
-    @abstractmethod
-    def close(self) -> None: ...
+    def close(self) -> None:
+        self._wrapped.close()
 
-    @abstractmethod
-    def ping(self, params: Any = None, headers: Any = None) -> Any: ...
+    @query_params()
+    def ping(self, params: Any = None, headers: Any = None) -> Any:
+        return self._wrapped.ping(params=params, headers=headers)
 
-    @abstractmethod
-    def info(self, params: Any = None, headers: Any = None) -> Any: ...
+    @query_params()
+    def info(self, params: Any = None, headers: Any = None) -> Any:
+        return self._wrapped.info(params=params, headers=headers)
 
-    @abstractmethod
-    def create(self, index: Any, id: Any, body: Any, params: Any = None, headers: Any = None) -> Any: ...
+    @query_params("pipeline", "refresh", "routing", "timeout", "version", "version_type", "wait_for_active_shards")
+    def create(self, index: Any, id: Any, body: Any, params: Any = None, headers: Any = None) -> Any:
+        return self._wrapped.create(index=index, id=id, body=body, params=params, headers=headers)
 
-    @abstractmethod
-    def index(self, index: Any, body: Any, id: Any = None, params: Any = None, headers: Any = None) -> Any: ...
+    @query_params(
+        "if_primary_term",
+        "if_seq_no",
+        "op_type",
+        "pipeline",
+        "refresh",
+        "require_alias",
+        "routing",
+        "timeout",
+        "version",
+        "version_type",
+        "wait_for_active_shards",
+    )
+    def index(self, index: Any, body: Any, id: Any = None, params: Any = None, headers: Any = None) -> Any:
+        return self._wrapped.index(index=index, body=body, id=id, params=params, headers=headers)
 
-    @abstractmethod
-    def bulk(self, body: Any, index: Any = None, params: Any = None, headers: Any = None) -> Any: ...
+    @query_params(
+        "_source",
+        "_source_excludes",
+        "_source_includes",
+        "pipeline",
+        "refresh",
+        "require_alias",
+        "routing",
+        "timeout",
+        "wait_for_active_shards",
+    )
+    def bulk(self, body: Any, index: Any = None, params: Any = None, headers: Any = None) -> Any:
+        return self._wrapped.bulk(body=body, index=index, params=params, headers=headers)
 
-    @abstractmethod
-    def clear_scroll(self, body: Any = None, scroll_id: Any = None, params: Any = None, headers: Any = None) -> Any: ...
+    @query_params()
+    def clear_scroll(self, body: Any = None, scroll_id: Any = None, params: Any = None, headers: Any = None) -> Any:
+        return self._wrapped.clear_scroll(body=body, scroll_id=scroll_id, params=params, headers=headers)
 
-    @abstractmethod
-    def count(self, body: Any = None, index: Any = None, params: Any = None, headers: Any = None) -> Any: ...
+    @query_params(
+        "allow_no_indices",
+        "analyze_wildcard",
+        "analyzer",
+        "default_operator",
+        "df",
+        "expand_wildcards",
+        "ignore_throttled",
+        "ignore_unavailable",
+        "lenient",
+        "min_score",
+        "preference",
+        "q",
+        "routing",
+        "terminate_after",
+    )
+    def count(self, body: Any = None, index: Any = None, params: Any = None, headers: Any = None) -> Any:
+        return self._wrapped.count(body=body, index=index, params=params, headers=headers)
 
-    @abstractmethod
-    def delete(self, index: Any, id: Any, params: Any = None, headers: Any = None) -> Any: ...
+    @query_params(
+        "if_primary_term",
+        "if_seq_no",
+        "refresh",
+        "routing",
+        "timeout",
+        "version",
+        "version_type",
+        "wait_for_active_shards",
+    )
+    def delete(self, index: Any, id: Any, params: Any = None, headers: Any = None) -> Any:
+        return self._wrapped.delete(index=index, id=id, params=params, headers=headers)
 
-    @abstractmethod
-    def delete_by_query(self, index: Any, body: Any, params: Any = None, headers: Any = None) -> Any: ...
+    @query_params(
+        "_source",
+        "_source_excludes",
+        "_source_includes",
+        "allow_no_indices",
+        "analyze_wildcard",
+        "analyzer",
+        "conflicts",
+        "default_operator",
+        "df",
+        "expand_wildcards",
+        "from_",
+        "ignore_unavailable",
+        "lenient",
+        "max_docs",
+        "preference",
+        "q",
+        "refresh",
+        "request_cache",
+        "requests_per_second",
+        "routing",
+        "scroll",
+        "scroll_size",
+        "search_timeout",
+        "search_type",
+        "size",
+        "slices",
+        "sort",
+        "stats",
+        "terminate_after",
+        "timeout",
+        "version",
+        "wait_for_active_shards",
+        "wait_for_completion",
+    )
+    def delete_by_query(self, index: Any, body: Any, params: Any = None, headers: Any = None) -> Any:
+        return self._wrapped.delete_by_query(index=index, body=body, params=params, headers=headers)
 
-    @abstractmethod
-    def delete_by_query_rethrottle(self, task_id: Any, params: Any = None, headers: Any = None) -> Any: ...
+    @query_params("requests_per_second")
+    def delete_by_query_rethrottle(self, task_id: Any, params: Any = None, headers: Any = None) -> Any:
+        return self._wrapped.delete_by_query_rethrottle(task_id=task_id, params=params, headers=headers)
 
-    @abstractmethod
-    def delete_script(self, id: Any, params: Any = None, headers: Any = None) -> Any: ...
+    @query_params("cluster_manager_timeout", "master_timeout", "timeout")
+    def delete_script(self, id: Any, params: Any = None, headers: Any = None) -> Any:
+        return self._wrapped.delete_script(id=id, params=params, headers=headers)
 
-    @abstractmethod
-    def exists(self, index: Any, id: Any, params: Any = None, headers: Any = None) -> Any: ...
+    @query_params(
+        "_source",
+        "_source_excludes",
+        "_source_includes",
+        "preference",
+        "realtime",
+        "refresh",
+        "routing",
+        "stored_fields",
+        "version",
+        "version_type",
+    )
+    def exists(self, index: Any, id: Any, params: Any = None, headers: Any = None) -> Any:
+        return self._wrapped.exists(index=index, id=id, params=params, headers=headers)
 
-    @abstractmethod
-    def exists_source(self, index: Any, id: Any, params: Any = None, headers: Any = None) -> Any: ...
+    @query_params(
+        "_source",
+        "_source_excludes",
+        "_source_includes",
+        "preference",
+        "realtime",
+        "refresh",
+        "routing",
+        "version",
+        "version_type",
+    )
+    def exists_source(self, index: Any, id: Any, params: Any = None, headers: Any = None) -> Any:
+        return self._wrapped.exists_source(index=index, id=id, params=params, headers=headers)
 
-    @abstractmethod
-    def explain(self, index: Any, id: Any, body: Any = None, params: Any = None, headers: Any = None) -> Any: ...
+    @query_params(
+        "_source",
+        "_source_excludes",
+        "_source_includes",
+        "analyze_wildcard",
+        "analyzer",
+        "default_operator",
+        "df",
+        "lenient",
+        "preference",
+        "q",
+        "routing",
+        "stored_fields",
+    )
+    def explain(self, index: Any, id: Any, body: Any = None, params: Any = None, headers: Any = None) -> Any:
+        return self._wrapped.explain(index=index, id=id, body=body, params=params, headers=headers)
 
-    @abstractmethod
-    def field_caps(self, body: Any = None, index: Any = None, params: Any = None, headers: Any = None) -> Any: ...
+    @query_params("allow_no_indices", "expand_wildcards", "fields", "ignore_unavailable", "include_unmapped")
+    def field_caps(self, body: Any = None, index: Any = None, params: Any = None, headers: Any = None) -> Any:
+        return self._wrapped.field_caps(body=body, index=index, params=params, headers=headers)
 
-    @abstractmethod
-    def get(self, index: Any, id: Any, params: Any = None, headers: Any = None) -> Any: ...
+    @query_params(
+        "_source",
+        "_source_excludes",
+        "_source_includes",
+        "preference",
+        "realtime",
+        "refresh",
+        "routing",
+        "stored_fields",
+        "version",
+        "version_type",
+    )
+    def get(self, index: Any, id: Any, params: Any = None, headers: Any = None) -> Any:
+        return self._wrapped.get(index=index, id=id, params=params, headers=headers)
 
-    @abstractmethod
-    def get_script(self, id: Any, params: Any = None, headers: Any = None) -> Any: ...
+    @query_params("cluster_manager_timeout", "master_timeout")
+    def get_script(self, id: Any, params: Any = None, headers: Any = None) -> Any:
+        return self._wrapped.get_script(id=id, params=params, headers=headers)
 
-    @abstractmethod
-    def get_source(self, index: Any, id: Any, params: Any = None, headers: Any = None) -> Any: ...
+    @query_params(
+        "_source",
+        "_source_excludes",
+        "_source_includes",
+        "preference",
+        "realtime",
+        "refresh",
+        "routing",
+        "version",
+        "version_type",
+    )
+    def get_source(self, index: Any, id: Any, params: Any = None, headers: Any = None) -> Any:
+        return self._wrapped.get_source(index=index, id=id, params=params, headers=headers)
 
-    @abstractmethod
-    def mget(self, body: Any, index: Any = None, params: Any = None, headers: Any = None) -> Any: ...
+    @query_params(
+        "_source",
+        "_source_excludes",
+        "_source_includes",
+        "preference",
+        "realtime",
+        "refresh",
+        "routing",
+        "stored_fields",
+    )
+    def mget(self, body: Any, index: Any = None, params: Any = None, headers: Any = None) -> Any:
+        return self._wrapped.mget(body=body, index=index, params=params, headers=headers)
 
-    @abstractmethod
-    def msearch(self, body: Any, index: Any = None, params: Any = None, headers: Any = None) -> Any: ...
+    @query_params(
+        "ccs_minimize_roundtrips",
+        "max_concurrent_searches",
+        "max_concurrent_shard_requests",
+        "pre_filter_shard_size",
+        "rest_total_hits_as_int",
+        "search_type",
+        "typed_keys",
+    )
+    def msearch(self, body: Any, index: Any = None, params: Any = None, headers: Any = None) -> Any:
+        return self._wrapped.msearch(body=body, index=index, params=params, headers=headers)
 
-    @abstractmethod
-    def msearch_template(self, body: Any, index: Any = None, params: Any = None, headers: Any = None) -> Any: ...
+    @query_params(
+        "ccs_minimize_roundtrips", "max_concurrent_searches", "rest_total_hits_as_int", "search_type", "typed_keys"
+    )
+    def msearch_template(self, body: Any, index: Any = None, params: Any = None, headers: Any = None) -> Any:
+        return self._wrapped.msearch_template(body=body, index=index, params=params, headers=headers)
 
-    @abstractmethod
-    def mtermvectors(self, body: Any = None, index: Any = None, params: Any = None, headers: Any = None) -> Any: ...
+    @query_params(
+        "field_statistics",
+        "fields",
+        "ids",
+        "offsets",
+        "payloads",
+        "positions",
+        "preference",
+        "realtime",
+        "routing",
+        "term_statistics",
+        "version",
+        "version_type",
+    )
+    def mtermvectors(self, body: Any = None, index: Any = None, params: Any = None, headers: Any = None) -> Any:
+        return self._wrapped.mtermvectors(body=body, index=index, params=params, headers=headers)
 
-    @abstractmethod
-    def put_script(self, id: Any, body: Any, context: Any = None, params: Any = None, headers: Any = None) -> Any: ...
+    @query_params("cluster_manager_timeout", "master_timeout", "timeout")
+    def put_script(self, id: Any, body: Any, context: Any = None, params: Any = None, headers: Any = None) -> Any:
+        return self._wrapped.put_script(id=id, body=body, context=context, params=params, headers=headers)
 
-    @abstractmethod
-    def rank_eval(self, body: Any, index: Any = None, params: Any = None, headers: Any = None) -> Any: ...
+    @query_params("allow_no_indices", "expand_wildcards", "ignore_unavailable", "search_type")
+    def rank_eval(self, body: Any, index: Any = None, params: Any = None, headers: Any = None) -> Any:
+        return self._wrapped.rank_eval(body=body, index=index, params=params, headers=headers)
 
-    @abstractmethod
-    def reindex(self, body: Any, params: Any = None, headers: Any = None) -> Any: ...
+    @query_params(
+        "max_docs",
+        "refresh",
+        "requests_per_second",
+        "scroll",
+        "slices",
+        "timeout",
+        "wait_for_active_shards",
+        "wait_for_completion",
+    )
+    def reindex(self, body: Any, params: Any = None, headers: Any = None) -> Any:
+        return self._wrapped.reindex(body=body, params=params, headers=headers)
 
-    @abstractmethod
-    def reindex_rethrottle(self, task_id: Any, params: Any = None, headers: Any = None) -> Any: ...
+    @query_params("requests_per_second")
+    def reindex_rethrottle(self, task_id: Any, params: Any = None, headers: Any = None) -> Any:
+        return self._wrapped.reindex_rethrottle(task_id=task_id, params=params, headers=headers)
 
-    @abstractmethod
-    def render_search_template(
-        self, body: Any = None, id: Any = None, params: Any = None, headers: Any = None
-    ) -> Any: ...
+    @query_params()
+    def render_search_template(self, body: Any = None, id: Any = None, params: Any = None, headers: Any = None) -> Any:
+        return self._wrapped.render_search_template(body=body, id=id, params=params, headers=headers)
 
-    @abstractmethod
-    def scripts_painless_execute(self, body: Any = None, params: Any = None, headers: Any = None) -> Any: ...
+    @query_params()
+    def scripts_painless_execute(self, body: Any = None, params: Any = None, headers: Any = None) -> Any:
+        return self._wrapped.scripts_painless_execute(body=body, params=params, headers=headers)
 
-    @abstractmethod
-    def scroll(self, body: Any = None, scroll_id: Any = None, params: Any = None, headers: Any = None) -> Any: ...
+    @query_params("rest_total_hits_as_int", "scroll")
+    def scroll(self, body: Any = None, scroll_id: Any = None, params: Any = None, headers: Any = None) -> Any:
+        return self._wrapped.scroll(body=body, scroll_id=scroll_id, params=params, headers=headers)
 
-    @abstractmethod
-    def search(self, body: Any = None, index: Any = None, params: Any = None, headers: Any = None) -> Any: ...
+    @query_params(
+        "_source",
+        "_source_excludes",
+        "_source_includes",
+        "allow_no_indices",
+        "allow_partial_search_results",
+        "analyze_wildcard",
+        "analyzer",
+        "batched_reduce_size",
+        "ccs_minimize_roundtrips",
+        "default_operator",
+        "df",
+        "docvalue_fields",
+        "expand_wildcards",
+        "explain",
+        "from_",
+        "ignore_throttled",
+        "ignore_unavailable",
+        "lenient",
+        "max_concurrent_shard_requests",
+        "pre_filter_shard_size",
+        "preference",
+        "q",
+        "request_cache",
+        "rest_total_hits_as_int",
+        "routing",
+        "scroll",
+        "search_type",
+        "seq_no_primary_term",
+        "size",
+        "sort",
+        "stats",
+        "stored_fields",
+        "suggest_field",
+        "suggest_mode",
+        "suggest_size",
+        "suggest_text",
+        "terminate_after",
+        "timeout",
+        "track_scores",
+        "track_total_hits",
+        "typed_keys",
+        "version",
+    )
+    def search(self, body: Any = None, index: Any = None, params: Any = None, headers: Any = None) -> Any:
+        return self._wrapped.search(body=body, index=index, params=params, headers=headers)
 
-    @abstractmethod
-    def search_shards(self, index: Any = None, params: Any = None, headers: Any = None) -> Any: ...
+    @query_params("allow_no_indices", "expand_wildcards", "ignore_unavailable", "local", "preference", "routing")
+    def search_shards(self, index: Any = None, params: Any = None, headers: Any = None) -> Any:
+        return self._wrapped.search_shards(index=index, params=params, headers=headers)
 
-    @abstractmethod
-    def search_template(self, body: Any, index: Any = None, params: Any = None, headers: Any = None) -> Any: ...
+    @query_params(
+        "allow_no_indices",
+        "ccs_minimize_roundtrips",
+        "expand_wildcards",
+        "explain",
+        "ignore_throttled",
+        "ignore_unavailable",
+        "preference",
+        "profile",
+        "rest_total_hits_as_int",
+        "routing",
+        "scroll",
+        "search_type",
+        "typed_keys",
+    )
+    def search_template(self, body: Any, index: Any = None, params: Any = None, headers: Any = None) -> Any:
+        return self._wrapped.search_template(body=body, index=index, params=params, headers=headers)
 
-    @abstractmethod
-    def termvectors(
-        self, index: Any, body: Any = None, id: Any = None, params: Any = None, headers: Any = None
-    ) -> Any: ...
+    @query_params(
+        "field_statistics",
+        "fields",
+        "offsets",
+        "payloads",
+        "positions",
+        "preference",
+        "realtime",
+        "routing",
+        "term_statistics",
+        "version",
+        "version_type",
+    )
+    def termvectors(self, index: Any, body: Any = None, id: Any = None, params: Any = None, headers: Any = None) -> Any:
+        return self._wrapped.termvectors(index=index, body=body, id=id, params=params, headers=headers)
 
-    @abstractmethod
-    def update(self, index: Any, id: Any, body: Any, params: Any = None, headers: Any = None) -> Any: ...
+    @query_params(
+        "_source",
+        "_source_excludes",
+        "_source_includes",
+        "if_primary_term",
+        "if_seq_no",
+        "lang",
+        "refresh",
+        "require_alias",
+        "retry_on_conflict",
+        "routing",
+        "timeout",
+        "wait_for_active_shards",
+    )
+    def update(self, index: Any, id: Any, body: Any, params: Any = None, headers: Any = None) -> Any:
+        return self._wrapped.update(index=index, id=id, body=body, params=params, headers=headers)
 
-    @abstractmethod
-    def update_by_query(self, index: Any, body: Any = None, params: Any = None, headers: Any = None) -> Any: ...
+    @query_params(
+        "_source",
+        "_source_excludes",
+        "_source_includes",
+        "allow_no_indices",
+        "analyze_wildcard",
+        "analyzer",
+        "conflicts",
+        "default_operator",
+        "df",
+        "expand_wildcards",
+        "from_",
+        "ignore_unavailable",
+        "lenient",
+        "max_docs",
+        "pipeline",
+        "preference",
+        "q",
+        "refresh",
+        "request_cache",
+        "requests_per_second",
+        "routing",
+        "scroll",
+        "scroll_size",
+        "search_timeout",
+        "search_type",
+        "size",
+        "slices",
+        "sort",
+        "stats",
+        "terminate_after",
+        "timeout",
+        "version",
+        "wait_for_active_shards",
+        "wait_for_completion",
+    )
+    def update_by_query(self, index: Any, body: Any = None, params: Any = None, headers: Any = None) -> Any:
+        return self._wrapped.update_by_query(index=index, body=body, params=params, headers=headers)
 
-    @abstractmethod
-    def update_by_query_rethrottle(self, task_id: Any, params: Any = None, headers: Any = None) -> Any: ...
+    @query_params("requests_per_second")
+    def update_by_query_rethrottle(self, task_id: Any, params: Any = None, headers: Any = None) -> Any:
+        return self._wrapped.update_by_query_rethrottle(task_id=task_id, params=params, headers=headers)
 
-    @abstractmethod
-    def get_script_context(self, params: Any = None, headers: Any = None) -> Any: ...
+    @query_params()
+    def get_script_context(self, params: Any = None, headers: Any = None) -> Any:
+        return self._wrapped.get_script_context(params=params, headers=headers)
 
-    @abstractmethod
-    def get_script_languages(self, params: Any = None, headers: Any = None) -> Any: ...
+    @query_params()
+    def get_script_languages(self, params: Any = None, headers: Any = None) -> Any:
+        return self._wrapped.get_script_languages(params=params, headers=headers)
 
-    @abstractmethod
-    def create_pit(self, index: Any, params: Any = None, headers: Any = None) -> Any: ...
+    @query_params("allow_partial_pit_creation", "expand_wildcards", "keep_alive", "preference", "routing")
+    def create_pit(self, index: Any, params: Any = None, headers: Any = None) -> Any:
+        return self._wrapped.create_pit(index=index, params=params, headers=headers)
 
-    @abstractmethod
-    def delete_all_pits(self, params: Any = None, headers: Any = None) -> Any: ...
+    @query_params()
+    def delete_all_pits(self, params: Any = None, headers: Any = None) -> Any:
+        return self._wrapped.delete_all_pits(params=params, headers=headers)
 
-    @abstractmethod
-    def delete_pit(self, body: Any = None, params: Any = None, headers: Any = None) -> Any: ...
+    @query_params()
+    def delete_pit(self, body: Any = None, params: Any = None, headers: Any = None) -> Any:
+        return self._wrapped.delete_pit(body=body, params=params, headers=headers)
 
-    @abstractmethod
-    def get_all_pits(self, params: Any = None, headers: Any = None) -> Any: ...
-
-    def proxy(self, username: str, password: str) -> Self:
-        pass
+    @query_params()
+    def get_all_pits(self, params: Any = None, headers: Any = None) -> Any:
+        return self._wrapped.get_all_pits(params=params, headers=headers)
 
     def create_index(
         self, index: str, body: dict | None = None, params: dict | None = None, headers: dict | None = None
@@ -348,8 +754,12 @@ class SearchEngineAdapter(ABC):
             raise Exception(e)
 
     def get_by_term(
-        self, index_name: str, term: str, term_value: str | int | float | date | datetime, fields: list | None = None
-    ) -> Any | None:
+        self,
+        index_name: str,
+        term: str,
+        term_value: str | int | float | date | datetime,
+        fields: list[str] | None = None,
+    ) -> dict | None:
         if fields is None:
             fields = []
         response = self.search(index=index_name, body={"query": {"term": {term: term_value}}})

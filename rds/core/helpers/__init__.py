@@ -2,15 +2,16 @@
 Documentar.
 """
 
-from typing import Any, List, Dict
+from typing import Any
 import logging
 import json
-from os import getenv
 import importlib
-
+from datetime import datetime
+from os import getenv
+from opensearchpy.helpers.search import Search
+from opensearchpy.helpers.response import Response
 
 logger = logging.getLogger(__name__)
-logger.setLevel(logging.INFO)
 
 
 def str2bool(v):
@@ -70,12 +71,17 @@ def env_as_int(key, default=None, wrapped=False):
     return int(result) if result is not None else result
 
 
+def env_as_float(key, default=None, wrapped=False):
+    result = env(key, default, wrapped)
+    return float(result) if result is not None else result
+
+
 def get_class(full_class_name: str) -> Any:
     module_name, class_name = full_class_name.rsplit(".", 1)
     return getattr(importlib.import_module(module_name), class_name)
 
 
-def instantiate_class(full_class_name: str, *args: List, **kwargs: Dict[str, Any]) -> Any:
+def instantiate_class(full_class_name: str, *args: list, **kwargs: dict[str, Any]) -> Any:
     Klass = get_class(full_class_name)
     return Klass(*args, **kwargs)
 
@@ -152,3 +158,29 @@ class Color:
     def u(text: str) -> str:
         """Returns a *underlined* string"""
         return f"\033[4m{text}{Color.ENDC}"
+
+
+class TEMPERATURE:
+    COLD = "COLD"
+    WARN = "WARN"
+    HOT = "HOT"
+
+
+def coldfy(obj: dict | list | Search | Response, datasource: str | None = None) -> dict | list:
+    if isinstance(obj, dict):
+        obj["@timestamp"] = obj.get("@timestamp", datetime.now())
+        obj["@temperature"] = obj.get("@temperature", TEMPERATURE.COLD)
+        if datasource:
+            obj["@datasource"] = obj.get("@datasource", datasource)
+        return obj
+
+    if isinstance(obj, list):
+        return [coldfy(h._source.to_dict(), datasource) for h in obj if isinstance(h, dict)]
+
+    if isinstance(obj, Response):
+        return [coldfy(h._source.to_dict(), datasource) for h in obj.hits.hits]
+
+    if isinstance(obj, Search):
+        return [coldfy(h._source.to_dict(), datasource) for h in obj.execute().hits.hits]
+
+    return obj
