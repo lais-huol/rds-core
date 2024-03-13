@@ -7,7 +7,7 @@ class CPFCNS(Enum):
     INVALIDO = "INVÁLIDO"
 
 
-class CPFCNSCNPJ(CPFCNS):
+class CPFCNSCNPJ(Enum):
     CPF = "cpf"
     CNS = "cns"
     CNPJ = "cnpj"
