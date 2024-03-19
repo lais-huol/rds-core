@@ -166,7 +166,22 @@ class TEMPERATURE:
     HOT = "HOT"
 
 
-def coldfy(obj: dict | list | Search | Response, datasource: str | None = None) -> dict | list:
+class DATASOURCE:
+    RDS = "RDS"
+    RNDS = "RNDS/DATASUS"
+    REST = "REST/CNES/DATASUS"
+    SOAP = "SOAP/CNES/DATASUS"
+
+
+# |	     | COLD | WARN | HOT |
+# | ---- | ---- | ---- | --- |
+# | RDS  |  x   |  x   |     |
+# | RNDS |      |      |  x  |
+# | REST |      |      |  x  |
+# | SOAP |      |      |  x  |
+
+
+def coldfy(obj: dict | list | Search | Response, datasource: str | None = "RDS") -> dict | list:
     if isinstance(obj, dict):
         obj["@timestamp"] = obj.get("@timestamp", datetime.now())
         obj["@temperature"] = obj.get("@temperature", TEMPERATURE.COLD)
@@ -175,12 +190,12 @@ def coldfy(obj: dict | list | Search | Response, datasource: str | None = None) 
         return obj
 
     if isinstance(obj, list):
-        return [coldfy(h._source.to_dict(), datasource) for h in obj if isinstance(h, dict)]
+        return [coldfy(h["_source"].to_dict(), datasource) for h in obj if isinstance(h, dict)]
 
     if isinstance(obj, Response):
-        return [coldfy(h._source.to_dict(), datasource) for h in obj.hits.hits]
+        return [coldfy(h["_source"].to_dict(), datasource) for h in obj["hits"]["hits"]]
 
     if isinstance(obj, Search):
-        return [coldfy(h._source.to_dict(), datasource) for h in obj.execute().hits.hits]
+        return [coldfy(h["_source"].to_dict(), datasource) for h in obj.execute()["hits"]["hits"]]
 
     return obj

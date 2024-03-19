@@ -1,5 +1,5 @@
 from typing import Any
-from opensearchpy import OpenSearch
+from opensearchpy import OpenSearch, Search
 from opensearchpy.client import (
     CatClient,
     ClusterClient,
@@ -16,9 +16,8 @@ from opensearchpy.client import (
     PluginsClient,
     HttpClient,
 )
-from rds.core.config import settings
 from rds.core.searchengine import get_searchengine_config
-from rds.core.searchengine.adapters.searchengineadapter import SearchEngineAdapter
+from rds.core.searchengine.adapters.searchengineadapter import SearchEngineAdapter, query_params
 
 
 class OpenSearchAdapter(SearchEngineAdapter):
@@ -123,3 +122,50 @@ class OpenSearchAdapter(SearchEngineAdapter):
         if self._http is None:
             self._http = HttpClient(self)
         return self._http
+
+    @query_params(
+        "_source",
+        "_source_excludes",
+        "_source_includes",
+        "allow_no_indices",
+        "allow_partial_search_results",
+        "analyze_wildcard",
+        "analyzer",
+        "batched_reduce_size",
+        "ccs_minimize_roundtrips",
+        "default_operator",
+        "df",
+        "docvalue_fields",
+        "expand_wildcards",
+        "explain",
+        "from_",
+        "ignore_throttled",
+        "ignore_unavailable",
+        "lenient",
+        "max_concurrent_shard_requests",
+        "pre_filter_shard_size",
+        "preference",
+        "q",
+        "request_cache",
+        "rest_total_hits_as_int",
+        "routing",
+        "scroll",
+        "search_type",
+        "seq_no_primary_term",
+        "size",
+        "sort",
+        "stats",
+        "stored_fields",
+        "suggest_field",
+        "suggest_mode",
+        "suggest_size",
+        "suggest_text",
+        "terminate_after",
+        "timeout",
+        "track_scores",
+        "track_total_hits",
+        "typed_keys",
+        "version",
+    )
+    def search(self, body: Any = None, index: Any = None, params: Any = None, headers: Any = None) -> Any:
+        return Search(using=self._wrapped, index=index)

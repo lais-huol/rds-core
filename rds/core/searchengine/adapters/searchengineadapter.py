@@ -534,52 +534,8 @@ class SearchEngineAdapter(ABC):
     def scroll(self, body: Any = None, scroll_id: Any = None, params: Any = None, headers: Any = None) -> Any:
         return self._wrapped.scroll(body=body, scroll_id=scroll_id, params=params, headers=headers)
 
-    @query_params(
-        "_source",
-        "_source_excludes",
-        "_source_includes",
-        "allow_no_indices",
-        "allow_partial_search_results",
-        "analyze_wildcard",
-        "analyzer",
-        "batched_reduce_size",
-        "ccs_minimize_roundtrips",
-        "default_operator",
-        "df",
-        "docvalue_fields",
-        "expand_wildcards",
-        "explain",
-        "from_",
-        "ignore_throttled",
-        "ignore_unavailable",
-        "lenient",
-        "max_concurrent_shard_requests",
-        "pre_filter_shard_size",
-        "preference",
-        "q",
-        "request_cache",
-        "rest_total_hits_as_int",
-        "routing",
-        "scroll",
-        "search_type",
-        "seq_no_primary_term",
-        "size",
-        "sort",
-        "stats",
-        "stored_fields",
-        "suggest_field",
-        "suggest_mode",
-        "suggest_size",
-        "suggest_text",
-        "terminate_after",
-        "timeout",
-        "track_scores",
-        "track_total_hits",
-        "typed_keys",
-        "version",
-    )
-    def search(self, body: Any = None, index: Any = None, params: Any = None, headers: Any = None) -> Any:
-        return self._wrapped.search(body=body, index=index, params=params, headers=headers)
+    @abstractmethod
+    def search(self, body: Any = None, index: Any = None, params: Any = None, headers: Any = None) -> Any: ...
 
     @query_params("allow_no_indices", "expand_wildcards", "ignore_unavailable", "local", "preference", "routing")
     def search_shards(self, index: Any = None, params: Any = None, headers: Any = None) -> Any:
@@ -762,7 +718,7 @@ class SearchEngineAdapter(ABC):
     ) -> dict | None:
         if fields is None:
             fields = []
-        response = self.search(index=index_name, body={"query": {"term": {term: term_value}}})
+        response = self._wrapped.search(index=index_name, body={"query": {"term": {term: term_value}}})
         if response["hits"]["total"]["value"] > 1:
             raise ToManyHits()
         if response["hits"]["total"]["value"] == 0:

@@ -5,12 +5,18 @@ desenvolvimento das aplicações que compõem ou comporão a RDS do LAIS e dos p
 suas próprias RDS, a exemplo REDS-RN e RDS-ES.
 """
 from typing import Any
-from datetime import datetime, date
-from requests import get as original_get, auth
+from requests import get as original_get
 from requests.auth import HTTPBasicAuth
 from rds.core.config import settings
 from rds.core.searchengine import searchengines, RDS_HOSTS
 from opensearchpy import Search
+
+
+class Credentials:
+
+    def __init__(self, username: str, password: str) -> None:
+        self.username = username
+        self.password = password
 
 
 class Service:
@@ -82,7 +88,7 @@ class Resource:
 
     @property
     def search(self):
-        return Search(using=self.searchengine, index=self.index_name)
+        return self.searchengine.search(index=self.index_name)
 
     def query(self, query: dict, filter_path: list[str] | None = None, *args, **kwargs) -> dict:
         return self.searchengine.search(

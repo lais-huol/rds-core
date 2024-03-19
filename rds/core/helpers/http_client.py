@@ -2,14 +2,13 @@
 Documentar.
 """
 
-from typing import Dict, List, Any, Union
 import json
 from http.client import HTTPException as OriginalHTTPException
 import requests
 from requests.structures import CaseInsensitiveDict
 from rds.core.config import settings
 
-DEFAULT_HEADERS: Dict[str, Any] = settings.get("DEFAULT_HEADERS", {})
+DEFAULT_HEADERS: dict = settings.get("DEFAULT_HEADERS", {})
 
 
 class HTTPException(OriginalHTTPException):
@@ -17,10 +16,10 @@ class HTTPException(OriginalHTTPException):
         self,
         message: str,
         url: str,
-        status_code: Union[str, None] = None,
-        reason: Union[str, None] = None,
-        request_headers: Union[Dict[Any, Any], None] = None,
-        response_headers: Union[CaseInsensitiveDict, None] = None,
+        status_code: str | None = None,
+        reason: str | None = None,
+        request_headers: dict | None = None,
+        response_headers: CaseInsensitiveDict | None = None,
     ) -> None:
         super().__init__(message)
         self.url = url
@@ -30,10 +29,10 @@ class HTTPException(OriginalHTTPException):
         self.response_headers = response_headers
 
 
-def get(url: str, headers: Dict[str, str] = {}, encoding: str = "utf-8", decode: bool = True, **kwargs) -> Any:
-    _headers = {**DEFAULT_HEADERS, **headers}
+def get(url: str, headers: dict | None = None, encoding: str = "utf-8", decode: bool = True, **kwargs) -> ...:
+    _headers = {**DEFAULT_HEADERS, **(headers or {})}
     try:
-        response = requests.get(url, headers=_headers, **kwargs)
+        response = requests.get(url, headers=_headers, verify=False, **kwargs)
     except Exception as e:
         raise e
 
@@ -46,7 +45,7 @@ def get(url: str, headers: Dict[str, str] = {}, encoding: str = "utf-8", decode:
 
 
 def get_json(
-    url: str, headers: Dict[str, str] = {}, encoding: str = "utf-8", json_kwargs: Dict[str, Any] = {}, **kwargs
-) -> Union[List[Any], Dict[str, Any]]:
-    content = get(url, headers=headers, encoding=encoding, **kwargs)
-    return json.loads(content, **json_kwargs)
+    url: str, headers: dict | None = None, encoding: str = "utf-8", json_kwargs: dict | None = None, **kwargs
+) -> list | dict:
+    content = get(url, headers=headers or {}, encoding=encoding, **kwargs)
+    return json.loads(content, **(json_kwargs or {}))
