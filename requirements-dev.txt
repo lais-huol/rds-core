@@ -11,7 +11,7 @@ pytest-profiling
 ruff
 types-requests
 
-opensearch_py>=2.0.0
+opensearch_py>=3.0.0
 opensearch_dsl>=2.0.1
 elasticsearch>=7.17.6
 elasticsearch_dsl>=7.4.0
