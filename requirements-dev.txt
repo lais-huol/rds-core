@@ -12,6 +12,6 @@ ruff
 types-requests
 
 opensearch_py>=2.0.0
-opensearch_dsl>=2.0.1
+opensearch_dsl>=2.1.0
 elasticsearch>=7.17.6
 elasticsearch_dsl>=7.4.0
